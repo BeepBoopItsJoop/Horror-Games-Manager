@@ -11,17 +11,30 @@ const getGamesList = async () => {
      return rows;
 }
 
+const getGame = async (id) => {
+     const SQL = `
+     SELECT games.title, games.release_date, developers.name AS developer_name
+     FROM games 
+     JOIN  developers
+     ON (games.developer_id = developers.id)
+     WHERE games.id = ($1);
+     `;
+     const { rows } = await pool.query(SQL, [id]);
+     return rows;
+}
+
 const getDevelopersList = async () => {
      const { rows } = await pool.query('SELECT * FROM developers');
      return rows;
 };
 
-// const insertUsername = async (username) => {
-//      await pool.query("INSERT INTO usernames (username) VALUES ($1)", [username]);
-// }
+const insertUsername = async (username) => {
+     await pool.query("INSERT INTO usernames (username) VALUES ($1)", [username]);
+}
 
 module.exports = {
      getGamesList,
+     getGame,
      getDevelopersList,
      // x
 };

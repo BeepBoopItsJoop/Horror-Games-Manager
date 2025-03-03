@@ -11,8 +11,14 @@ exports.gamesListGet = async (req, res) => {
      });
 }
 
-exports.gameGet = (req, res) => {
-     res.render('game', {
-          title: 'Game',
+exports.gameGet = async (req, res) => {
+     console.log(req.params);
+     const game = await db.getGame(req.params.id);
+
+     console.log(game);
+
+     res.render('gamesList', {
+          title: game.title,
+          games: game,
      });
 }

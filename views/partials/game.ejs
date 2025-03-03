@@ -1,5 +1,5 @@
 <li>
-     <span>Title: <%= game.title %></span>
-     <!-- <span>Release Date: <%= game.release_date %></span> -->
-     <span>Developer: <%= game.developer_name %></span>
+     <span>Title: <%= game.title %></span> <br>
+     <span>Release Date: <%= new Date(game.release_date).toLocaleDateString() %></span> <br>
+     <span>Developer: <%= game.developer_name %></span> <br>
 </li>
