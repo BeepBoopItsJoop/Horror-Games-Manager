@@ -6,6 +6,8 @@ const gamesController = require('../controllers/gamesController');
 gamesRouter.get("/", gamesController.gameListGet);
 gamesRouter.get("/:id", gamesController.gameGet);
 gamesRouter.get("/:id/monsters", gamesController.gameMonsterListGet);
+gamesRouter.get("/:id/monsters/:monster_id", gamesController.MonsterGet);
+gamesRouter.get("/monsters/:monster_id", gamesController.MonsterGet);
 // gamesRouter.get("/:id/locations", gamesController.gameGet);
 
 module.exports = gamesRouter;

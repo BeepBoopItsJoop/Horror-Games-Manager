@@ -24,8 +24,19 @@ exports.gameMonsterListGet = async (req, res) => {
      console.log(games[0].title);
 
      res.render('monsterList', {
-          title: monsters[0].name,
+          title: games[0].title,
           gameTitle: games[0].title,
+          monsters: monsters,
+     });
+}
+
+exports.MonsterGet = async (req, res) => {
+     const monsters = await db.Monster(req.params.monster_id);
+
+     console.log(monsters[0]);
+
+     res.render('monsterList', {
+          title: monsters[0].name,
           monsters: monsters,
      });
 }

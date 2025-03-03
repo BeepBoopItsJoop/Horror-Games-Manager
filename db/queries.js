@@ -36,6 +36,16 @@ const gameMonsterList = async (id) => {
      return rows;
 }
 
+const Monster = async (id) => {
+     const SQL = `
+     SELECT monsters.name, monsters.description
+     FROM monsters
+     WHERE monsters.id = ($1);`;
+
+     const { rows } = await pool.query(SQL, [id]);
+     return rows;
+}
+
 const developerList = async () => {
      const { rows } = await pool.query('SELECT * FROM developers');
      return rows;
@@ -50,6 +60,6 @@ module.exports = {
      game,
      gameMonsterList,
      developerList,
-     // x
+     Monster,
 };
 
