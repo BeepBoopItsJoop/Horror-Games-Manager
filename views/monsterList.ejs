@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title><%= title %></title>
+</head>
+<body>
+     <%- include('partials/nav.ejs'); %>
+
+     <h1>Monsters in <%= locals.gameTitle %></h1>
+
+     <% if(!locals.monsters) { %>
+          <span>No monsters were found, this shouldnt happen</span>
+     <% } else %>
+     <% monsters.forEach(monster => { %>
+          <%- include('partials/monster.ejs', {monster: monster}); %>
+     <% }) %>
+</body>
+</html>

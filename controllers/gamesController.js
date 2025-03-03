@@ -1,24 +1,31 @@
 const db = require('../db/queries');
 
-exports.gamesListGet = async (req, res) => {
-     const games = await db.getGamesList();
+exports.gameListGet = async (req, res) => {
+     const games = await db.gameList();
 
-     // console.log("games :", games);
-     // res.send('ok');
-     res.render('gamesList', {
-          title: 'Games list',
+     res.render('gameList', {
+          title: 'Game list',
           games: games,
      });
 }
 
 exports.gameGet = async (req, res) => {
-     console.log(req.params);
-     const game = await db.getGame(req.params.id);
+     const games = await db.game(req.params.id);
+     res.render('gameList', {
+          title: games[0].title,
+          games: games,
+     });
+}
 
-     console.log(game);
+exports.gameMonsterListGet = async (req, res) => {
+     const monsters = await db.gameMonsterList(req.params.id);
+     const games = await db.game(req.params.id);
 
-     res.render('gamesList', {
-          title: game.title,
-          games: game,
+     console.log(games[0].title);
+
+     res.render('monsterList', {
+          title: monsters[0].name,
+          gameTitle: games[0].title,
+          monsters: monsters,
      });
 }

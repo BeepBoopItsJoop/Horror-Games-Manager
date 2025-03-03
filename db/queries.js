@@ -1,6 +1,6 @@
 const pool = require('./pool');
 
-const getGamesList = async () => {
+const gameList = async () => {
      const SQL = `
      SELECT games.title, games.release_date, developers.name AS developer_name
      FROM games 
@@ -11,7 +11,7 @@ const getGamesList = async () => {
      return rows;
 }
 
-const getGame = async (id) => {
+const game = async (id) => {
      const SQL = `
      SELECT games.title, games.release_date, developers.name AS developer_name
      FROM games 
@@ -23,19 +23,33 @@ const getGame = async (id) => {
      return rows;
 }
 
-const getDevelopersList = async () => {
+const gameMonsterList = async (id) => {
+     const SQL = `
+     SELECT monsters.name, monsters.description
+     FROM games
+     JOIN monsters 
+     ON (games.id = monsters.game_id)
+     WHERE games.id = ($1);
+     `
+
+     const { rows } = await pool.query(SQL, [id]);
+     return rows;
+}
+
+const developerList = async () => {
      const { rows } = await pool.query('SELECT * FROM developers');
      return rows;
 };
 
-const insertUsername = async (username) => {
-     await pool.query("INSERT INTO usernames (username) VALUES ($1)", [username]);
-}
+// const insertUsername = async (username) => {
+//      await pool.query("INSERT INTO usernames (username) VALUES ($1)", [username]);
+// }
 
 module.exports = {
-     getGamesList,
-     getGame,
-     getDevelopersList,
+     gameList,
+     game,
+     gameMonsterList,
+     developerList,
      // x
 };
 
