@@ -60,6 +60,19 @@ const developer = async (id) => {
      return rows;
 }
 
+const developerGameList = async (dev_id) => {
+     const SQL = `
+     SELECT games.title, games.release_date, games.id
+     FROM games 
+     JOIN developers 
+     ON (games.developer_id = developers.id) 
+     WHERE developers.id = ($1);
+     `;
+
+     const { rows } = await pool.query(SQL, [dev_id]);
+     return rows;
+}
+
 const gameLocationList = async (id) => {
      const SQL = `
      SELECT locations.name, locations.description, locations.id
@@ -90,6 +103,7 @@ const location = async (id) => {
 module.exports = {
      developerList,
      developer,
+     developerGameList,
      gameList,
      game,
      gameMonsterList,

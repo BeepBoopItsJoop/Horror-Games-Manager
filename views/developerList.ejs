@@ -11,9 +11,17 @@
      <% if(!locals.developers) { %>
           <span>No developers were found, this shouldnt happen</span>
      <% } else {%>
-          <% developers.forEach(dev => { %>
+          <% locals.developers.forEach(dev => { %>
                <%- include('partials/developer.ejs', {dev: dev}); %>
           <% }) %>
+          <br>
+          <!-- would happen only if there is one developer -->
+          <% if(locals.games) { %> 
+               <h2>Games by <%= developers[0].name %></h2>
+               <% locals.games.forEach(game => { %>
+                    <%- include('partials/game.ejs', {game: game}) %>
+               <% }) %>
+          <% } %>
      <% } %>
      </body>
 </html>

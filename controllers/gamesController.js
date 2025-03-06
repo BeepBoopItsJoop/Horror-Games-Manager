@@ -10,7 +10,7 @@ exports.gameListGet = async (req, res) => {
      });
 }
 
-exports.gameGet = async (req, res) => {gamegamegame
+exports.gameGet = async (req, res) => {
      const games = await db.game(req.params.id);
      res.render('gameList', {
           title: games[0].title,

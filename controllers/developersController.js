@@ -8,13 +8,18 @@ exports.developerListGet = async (req, res) => {
           developers: developers,
           id: req.params.id,
      });
-};
+}
 
-exports.developerGet = async(req, res) => {
+exports.developerGet = async (req, res) => {
      const developers = await db.developer(req.params.id);
+     let games = null;
+     if (developers.length === 1) {
+          games = await db.developerGameList(req.params.id);
+     }     
 
      res.render('developerList', {
           title: 'Developer List',
           developers: developers,
+          games: games,
      });
 }
