@@ -2,4 +2,13 @@
      <span>Title: <%= game.title %></span> <br>
      <span>Release Date: <%= new Date(game.release_date).toLocaleDateString() %></span> <br>
      <span>Developer: <%= game.developer_name %></span> <br>
+     <a href="/games/<%- game.id %>">
+          <% if(game.id) { %>
+               Check this game
+          <% } else { %>
+               Go back to list
+          <% } %>
+     </a> <br>
+     <a href="/games/<%- ((game.id) ? game.id : 1)%>/monsters">Check out monsters</a> <br>
+     <a href="/games/<%- ((game.id) ? game.id : 1)%>/locations">Check out locations</a> <br>
 </li>

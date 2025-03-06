@@ -8,15 +8,15 @@
 <body>
      <%- include('partials/nav.ejs'); %>
 
-     <% if(monsters.length > 1) { %>
-          <h1>Monsters in <%= locals.gameTitle %></h1>
+     <% if(locations.length > 1) { %>
+          <h1>Locations in <%= locals.gameTitle %></h1>
      <% } %>
 
-     <% if(!locals.monsters) { %>
-          <span>No monsters were found, this shouldnt happen</span>
+     <% if(!locals.locations) { %>
+          <span>No locations were found, this shouldnt happen</span>
      <% } else %>
-     <% monsters.forEach(monster => { %>
-          <%- include('partials/monster.ejs', {monster: monster}); %>
+     <% locations.forEach(location => { %>
+          <%- include('partials/location.ejs', {location: location}); %>
      <% }) %>
      <a href="javascript:history.back();">Go back</a>
      </body>

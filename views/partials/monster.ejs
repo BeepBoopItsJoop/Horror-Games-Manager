@@ -1,4 +1,7 @@
 <li>
      <span>Monster name: <%= monster.name %></span> <br>
      <span>Description: <%= monster.description %></span> <br>
+     <% if(monster.id) { %>
+          <a href="/games/monsters/<%= monster.id %>">Check this monster out</a>     
+     <% } %>
 </li>

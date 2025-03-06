@@ -10,9 +10,10 @@
 
      <% if(!locals.games) { %>
           <span>No games were found, this shouldnt happen</span>
-     <% } else %>
-     <% games.forEach(game => { %>
-          <%- include('partials/game.ejs', {game: game}); %>
-     <% }) %>
+     <% } else {%>
+          <% games.forEach(game => { %>
+               <%- include('partials/game.ejs', {game: game}); %>
+          <% }) %>
+     <% } %>
 </body>
 </html>

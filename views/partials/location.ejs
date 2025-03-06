@@ -1,0 +1,7 @@
+<li>
+     <span>Location name: <%= location.name %></span> <br>
+     <span>Description: <%= location.description %></span> <br>
+     <% if(location.id) { %>
+          <a href="/games/locations/<%= location.id %>">Check this location out</a>     
+     <% } %>
+</li>
