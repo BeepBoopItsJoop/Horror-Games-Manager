@@ -1,0 +1,11 @@
+<li>
+     <span>Developer name: <%= dev.name %></span> <br>
+     <span>Country of origin: <%= dev.country %></span> <br>
+     <a href="/developers/<%- dev.id %>">
+          <% if(dev.id) { %>
+               Check this developer
+          <% } else { %>
+               Go back to list
+          <% } %>
+     </a> <br>
+</li>

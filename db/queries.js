@@ -46,9 +46,19 @@ const monster = async (id) => {
 }
 
 const developerList = async () => {
-     const { rows } = await pool.query('SELECT * FROM developers');
+     const { rows } = await pool.query('SELECT developers.id, developers.name, developers.country FROM developers');
      return rows;
 };
+
+const developer = async (id) => {
+     const SQL = `
+     SELECT developers.name, developers.country
+     FROM developers
+     WHERE developers.id = ($1);
+     `;
+     const { rows } = await pool.query(SQL, [id]);
+     return rows;
+}
 
 const gameLocationList = async (id) => {
      const SQL = `
@@ -78,10 +88,11 @@ const location = async (id) => {
 // }
 
 module.exports = {
+     developerList,
+     developer,
      gameList,
      game,
      gameMonsterList,
-     developerList,
      monster,
      gameLocationList,
      location,
