@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title><%= title %></title>
+</head>
+<body>
+     <%- include('partials/nav') %>
+
+     <h1><%= title %></h1>
+     
+     <form action="/developers/new" method="post">
+          <label for="name">Name of developer: </label>
+          <input type="text" name="name" id="name" required> <br>
+
+          <label for="country">Country of origin: </label>
+          <input type="text" name="country" id="country" required> <br>
+
+          <button type="submit">Add developer</button>
+
+     </form>
+
+     <a href="/developers">Back to manager</a>
+
+</body>
+</html> 

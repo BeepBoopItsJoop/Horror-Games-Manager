@@ -24,7 +24,22 @@ const developerGet = async (req, res) => {
      });
 }
 
+const developerCreateGet = async (req, res) => {
+     res.render("createDeveloper", {
+          title: "Create developer",
+     });
+}
+
+const developerCreatePost = (req, res) => {
+     const {name, country} = req.body;
+     // TODO: add validation
+     // db.addDeveloper({name, country});
+     res.redirect("/developers");
+}
+
 module.exports = {
      developerListGet,
      developerGet,
+     developerCreateGet,
+     developerCreatePost,
 };

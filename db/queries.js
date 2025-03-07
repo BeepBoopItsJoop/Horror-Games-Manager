@@ -69,6 +69,15 @@ const developer = async (id) => {
      return rows;
 }
 
+const addDeveloper = async ({name, country}) => {
+     const SQL = `
+     INSERT INTO developers (name, country)
+     VALUES ($1, $2);
+     `;
+     
+     await pool.query(SQL, [name, country]);
+}
+
 const developerGameList = async (dev_id) => {
      const SQL = `
      SELECT games.title, games.release_date, games.id
@@ -112,6 +121,7 @@ const location = async (id) => {
 module.exports = {
      developerList,
      developer,
+     addDeveloper,
      developerGameList,
      gameList,
      game,
