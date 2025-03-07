@@ -1,6 +1,6 @@
 const db = require('../db/queries');
 
-exports.gameListGet = async (req, res) => {
+const gameListGet = async (req, res) => {
      const games = await db.gameList();
 
      res.render('gameList', {
@@ -10,7 +10,7 @@ exports.gameListGet = async (req, res) => {
      });
 }
 
-exports.gameGet = async (req, res) => {
+const gameGet = async (req, res) => {
      const games = await db.game(req.params.id);
      res.render('gameList', {
           title: games[0].title,
@@ -18,7 +18,7 @@ exports.gameGet = async (req, res) => {
      });
 }
 
-exports.gameMonsterListGet = async (req, res) => {
+const gameMonsterListGet = async (req, res) => {
      const monsters = await db.gameMonsterList(req.params.id);
      const games = await db.game(req.params.id);
 
@@ -29,7 +29,7 @@ exports.gameMonsterListGet = async (req, res) => {
      });
 }
 
-exports.monsterGet = async (req, res) => {
+const monsterGet = async (req, res) => {
      const monsters = await db.monster(req.params.monster_id);
 
      res.render('monsterList', {
@@ -38,7 +38,7 @@ exports.monsterGet = async (req, res) => {
      });
 }
 
-exports.gameLocationListGet = async (req, res) => {
+const gameLocationListGet = async (req, res) => {
      const locations = await db.gameLocationList(req.params.id);
      const games = await db.game(req.params.id);
 
@@ -49,7 +49,7 @@ exports.gameLocationListGet = async (req, res) => {
      });
 }
 
-exports.locationGet = async (req, res) => {
+const locationGet = async (req, res) => {
      const locations = await db.location(req.params.location_id);
 
      res.render('locationList', {
@@ -57,3 +57,28 @@ exports.locationGet = async (req, res) => {
           locations: locations,
      });
 }
+
+const gameCreateGet = async (req, res) => {
+     const developers = await db.developerList();
+
+     res.render("createGame", {
+          title: "Create game",
+          developers: developers
+     });
+}
+
+const gameCreatePost = (req, res) => {
+     res.redirect("/");
+
+}
+
+module.exports = {
+     gameListGet,
+     gameGet,
+     gameMonsterListGet,
+     monsterGet,
+     gameLocationListGet,
+     locationGet,
+     gameCreateGet,
+     gameCreatePost,
+};

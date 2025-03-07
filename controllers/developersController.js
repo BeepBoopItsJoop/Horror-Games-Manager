@@ -1,6 +1,6 @@
 const db = require('../db/queries');
 
-exports.developerListGet = async (req, res) => {
+const developerListGet = async (req, res) => {
      const developers = await db.developerList();
 
      res.render('developerList', {
@@ -10,7 +10,7 @@ exports.developerListGet = async (req, res) => {
      });
 }
 
-exports.developerGet = async (req, res) => {
+const developerGet = async (req, res) => {
      const developers = await db.developer(req.params.id);
      let games = null;
      if (developers.length === 1) {
@@ -23,3 +23,8 @@ exports.developerGet = async (req, res) => {
           games: games,
      });
 }
+
+module.exports = {
+     developerListGet,
+     developerGet,
+};
