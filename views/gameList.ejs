@@ -16,7 +16,7 @@
                     <a href="/developers">Check out the developers</a> <br>
                <% } %>
                <% games.forEach(game => { %>
-                    <%- include('partials/game.ejs', {game: game}); %>
+                    <%- include('partials/game.ejs', {game: game, loneGame: (games.length === 1)}); %>
                <% }) %>
           <% } %>
 </body>

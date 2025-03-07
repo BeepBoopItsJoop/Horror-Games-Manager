@@ -13,7 +13,7 @@ const gameList = async () => {
 
 const game = async (id) => {
      const SQL = `
-     SELECT games.title, games.release_date, developers.name AS developer_name
+     SELECT games.id, games.title, games.release_date, developers.name AS developer_name
      FROM games 
      JOIN  developers
      ON (games.developer_id = developers.id)
@@ -21,6 +21,15 @@ const game = async (id) => {
      `;
      const { rows } = await pool.query(SQL, [id]);
      return rows;
+}
+
+const addGame = async ({title, release_date, developer}) => {
+     const SQL = `
+     INSERT INTO games (title, release_date, developer_id)
+     VALUES ($1, $2, $3);
+     `;
+     
+     await pool.query(SQL, [title, release_date, developer]);
 }
 
 const gameMonsterList = async (id) => {
@@ -106,6 +115,7 @@ module.exports = {
      developerGameList,
      gameList,
      game,
+     addGame,
      gameMonsterList,
      monster,
      gameLocationList,

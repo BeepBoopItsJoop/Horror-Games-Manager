@@ -68,7 +68,11 @@ const gameCreateGet = async (req, res) => {
 }
 
 const gameCreatePost = (req, res) => {
-     res.redirect("/");
+
+     const {title, release_date, developer} = req.body;
+     // TODDO: add validation
+     // db.addGame({title, release_date, developer});
+     res.redirect("/games");
 
 }
 

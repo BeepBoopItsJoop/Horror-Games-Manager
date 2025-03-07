@@ -3,15 +3,14 @@
      <span>Release Date: <%= new Date(game.release_date).toLocaleDateString() %></span> <br>
      <span>Developer: <%= game.developer_name %></span> <br>
      
-     <% if(game.id) { %>
-          <a href="/games/<%- game.id %>">
-               Check this game
-          </a> <br>
-     <% } else { %>
+     <% if(locals.loneGame) { %>
           <a href="javascript:history.back()">
                Go back
           </a> <br>
+          <a href="/games/<%- game.id %>/monsters">Check out monsters</a> <br>
+          <a href="/games/<%- game.id %>/locations">Check out locations</a> <br>
+     <% } else { %>
+          <a href="/games/<%- game.id %>"> Check this game</a> <br>
      <% } %>
-     <a href="/games/<%- ((game.id) ? game.id : 1)%>/monsters">Check out monsters</a> <br>
-     <a href="/games/<%- ((game.id) ? game.id : 1)%>/locations">Check out locations</a> <br>
 </li>
+

@@ -10,7 +10,7 @@
 
      <h1><%= title %></h1>
      
-     <form action="/games/create" method="post">
+     <form action="/games/new" method="post">
           <label for="title">Title: </label>
           <input type="text" name="title" id="title" required> <br>
 
@@ -22,7 +22,9 @@
                <% developers.forEach(dev => { %>
                     <option value="<%= dev.id %>" > <%= dev.name %> </option>
                <% }) %>
-          </select>
+          </select> <br>
+
+          <button type="submit">Add game</button>
 
      </form>
 
