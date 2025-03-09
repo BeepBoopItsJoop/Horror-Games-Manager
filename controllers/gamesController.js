@@ -61,7 +61,7 @@ const locationGet = async (req, res) => {
 const gameCreateGet = async (req, res) => {
      const developers = await db.developerList();
 
-     res.render("createGame", {
+     res.render("create/createGame", {
           title: "Create game",
           developers: developers
      });
@@ -77,7 +77,7 @@ const gameCreatePost = (req, res) => {
 }
 
 const monsterCreateGet = (req, res) => {
-     res.render('createMonster', {
+     res.render('create/createMonster', {
           title: 'Add a new monster',
           id: req.params.id,
      });
@@ -92,7 +92,7 @@ const monsterCreatePost = (req, res) => {
 }
 
 const locationCreateGet = (req, res) => {
-     res.render('createLocation', {
+     res.render('create/createLocation', {
           title: 'Add a new location',
           id: req.params.id,
      });

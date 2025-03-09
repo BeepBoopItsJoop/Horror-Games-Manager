@@ -25,7 +25,7 @@ const developerGet = async (req, res) => {
 }
 
 const developerCreateGet = async (req, res) => {
-     res.render("createDeveloper", {
+     res.render("create/createDeveloper", {
           title: "Create developer",
      });
 }
