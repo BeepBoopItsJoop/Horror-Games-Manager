@@ -152,6 +152,16 @@ const addLocation = async ({name, description, id}) => {
      await pool.query(SQL, [name, description, id]);
 }
 
+const updateLocation = async ({name, description, id}) => {
+     const SQL = `
+     UPDATE locations 
+     SET name = $1, description = $2
+     WHERE id = $3;
+     `;
+     
+     await pool.query(SQL, [name, description, id]);
+}
+
 module.exports = {
      developerList,
      developer,
@@ -171,5 +181,6 @@ module.exports = {
      gameLocationList,
      location,
      addLocation,
+     updateLocation,
 };
 

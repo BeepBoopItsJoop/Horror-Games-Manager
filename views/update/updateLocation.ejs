@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title><%= title %></title>
+</head>
+<body>
+     <%- include('../partials/nav') %>
+
+     <h1><%= title %></h1>
+     
+     <form action="/games/locations/<%= location.id %>/modify" method="post">
+          <label for="name">Name of location: </label>
+          <input type="text" name="name" id="name" value="<%= location.name %>" required> <br>
+
+          <label for="description">Description of location: </label>
+          <input type="text" name="description" id="description" size="250" value="<%= location.description %>" required> <br>
+
+          <!-- Hidden input field to include monster id in the POST request -->
+          <input type="hidden" name="id" value="<%= location.id %>">
+
+          <button type="submit">Modify location</button>
+
+     </form>
+
+     <a href="/games/locations/<%= location.id %>">Back to location</a>
+
+</body>
+</html> 

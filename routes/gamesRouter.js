@@ -23,7 +23,11 @@ gamesRouter.get("/:id/locations", gamesController.gameLocationListGet);
 gamesRouter.get("/:id/locations/new", gamesController.locationCreateGet);
 gamesRouter.post("/:id/locations/new", gamesController.locationCreatePost);
 gamesRouter.get("/:id/locations/:location_id", gamesController.locationGet);
+gamesRouter.get("/:id/locations/:location_id/modify", gamesController.locationUpdateGet);
+gamesRouter.post("/:id/locations/:location_id/modify", gamesController.locationUpdatePost);
 gamesRouter.get("/locations/:location_id", gamesController.locationGet);
+gamesRouter.get("/locations/:location_id/modify", gamesController.locationUpdateGet);
+gamesRouter.post("/locations/:location_id/modify", gamesController.locationUpdatePost);
 
 
 module.exports = gamesRouter;

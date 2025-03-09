@@ -123,6 +123,23 @@ const monsterUpdatePost = async (req,res) => {
      res.redirect(`/games/monsters/${id}`);
 }
 
+const locationUpdateGet = async (req, res) => {
+     const location = (await db.location(req.params.location_id))[0];
+     location.id = req.params.location_id;
+
+     res.render("update/updateLocation", {
+          title: `Update ${location.name}`,
+          location: location,
+     });
+}
+
+const locationUpdatePost = async (req, res) => {
+     const { name, description, id } = req.body;
+     // TODO: add validation
+     await db.updateLocation({name, description, id});
+     res.redirect(`/games/locations/${id}`);
+}
+
 module.exports = {
      gameListGet,
      gameGet,
@@ -140,4 +157,6 @@ module.exports = {
 
      monsterUpdateGet,
      monsterUpdatePost,
+     locationUpdateGet,
+     locationUpdatePost,
 };
