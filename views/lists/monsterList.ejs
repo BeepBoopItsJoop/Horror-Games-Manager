@@ -6,7 +6,7 @@
      <title><%= title %></title>
 </head>
 <body>
-     <%- include('partials/nav.ejs'); %>
+     <%- include('../partials/nav.ejs'); %>
 
      <% if(monsters.length > 1) { %>
           <h1>Monsters in <%= locals.gameTitle %></h1>
@@ -16,7 +16,7 @@
           <span>No monsters were found, this shouldnt happen</span>
      <% } else %>
      <% monsters.forEach(monster => { %>
-          <%- include('partials/monster.ejs', {monster: monster}); %>
+          <%- include('../partials/monster.ejs', {monster: monster}); %>
      <% }) %>
      <a href="javascript:history.back();">Go back</a>
      </body>

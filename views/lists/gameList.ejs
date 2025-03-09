@@ -6,7 +6,7 @@
      <title><%= title %></title>
 </head>
 <body>
-     <%- include('partials/nav.ejs'); %>
+     <%- include('../partials/nav.ejs'); %>
 
      
      <% if(!locals.games) { %>
@@ -16,7 +16,7 @@
                     <a href="/developers">Check out the developers</a> <br>
                <% } %>
                <% games.forEach(game => { %>
-                    <%- include('partials/game.ejs', {game: game, loneGame: (games.length === 1)}); %>
+                    <%- include('../partials/game.ejs', {game: game, loneGame: (games.length === 1)}); %>
                <% }) %>
           <% } %>
 </body>

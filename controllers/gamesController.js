@@ -3,7 +3,7 @@ const db = require('../db/queries');
 const gameListGet = async (req, res) => {
      const games = await db.gameList();
 
-     res.render('gameList', {
+     res.render('lists/gameList', {
           title: 'Game list',
           games: games,
           id: req.params.id,
@@ -12,7 +12,7 @@ const gameListGet = async (req, res) => {
 
 const gameGet = async (req, res) => {
      const games = await db.game(req.params.id);
-     res.render('gameList', {
+     res.render('lists/gameList', {
           title: games[0].title,
           games: games,
      });
@@ -22,7 +22,7 @@ const gameMonsterListGet = async (req, res) => {
      const monsters = await db.gameMonsterList(req.params.id);
      const games = await db.game(req.params.id);
 
-     res.render('monsterList', {
+     res.render('lists/monsterList', {
           title: games[0].title,
           gameTitle: games[0].title,
           monsters: monsters,
@@ -32,7 +32,7 @@ const gameMonsterListGet = async (req, res) => {
 const monsterGet = async (req, res) => {
      const monsters = await db.monster(req.params.monster_id);
 
-     res.render('monsterList', {
+     res.render('lists/monsterList', {
           title: monsters[0].name,
           monsters: monsters,
      });
@@ -42,7 +42,7 @@ const gameLocationListGet = async (req, res) => {
      const locations = await db.gameLocationList(req.params.id);
      const games = await db.game(req.params.id);
 
-     res.render('locationList', {
+     res.render('lists/locationList', {
           title: games[0].title,
           gameTitle: games[0].title,
           locations: locations,
@@ -52,7 +52,7 @@ const gameLocationListGet = async (req, res) => {
 const locationGet = async (req, res) => {
      const locations = await db.location(req.params.location_id);
 
-     res.render('locationList', {
+     res.render('lists/locationList', {
           title: locations[0].name,
           locations: locations,
      });
