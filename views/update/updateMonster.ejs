@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title><%= title %></title>
+</head>
+<body>
+     <%- include('../partials/nav') %>
+
+     <h1><%= title %></h1>
+     
+     <form action="/games/monsters/<%= monster.id %>/modify" method="post">
+          <label for="name">Name of monster: </label>
+          <input type="text" name="name" id="name" value="<%= monster.name %>" required> <br>
+
+          <label for="description">Description of monster: </label>
+          <input type="text" name="description" id="description" size="250" value="<%= monster.description %>" required> <br>
+
+          <!-- Hidden input field to include monster id in the POST request -->
+          <input type="hidden" name="id" value="<%= monster.id %>">
+
+          <button type="submit">Modify monster</button>
+
+     </form>
+
+     <a href="/games/monsters/<%= monster.id %>">Back to monster</a>
+
+</body>
+</html> 

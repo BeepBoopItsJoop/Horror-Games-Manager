@@ -59,7 +59,17 @@ const addMonster = async ({name, description, id}) => {
      INSERT INTO monsters (name, description, game_id)
      VALUES ($1, $2, $3);
      `;
+     
+     await pool.query(SQL, [name, description, id]);
+}
 
+const updateMonster = async ({name, description, id}) => {
+     const SQL = `
+     UPDATE monsters 
+     SET name = $1, description = $2
+     WHERE id = $3;
+     `;
+     
      await pool.query(SQL, [name, description, id]);
 }
 
@@ -147,13 +157,17 @@ module.exports = {
      developer,
      addDeveloper,
      updateDeveloper,
+     
      developerGameList,
      gameList,
      game,
      addGame,
+
      gameMonsterList,
      monster,
      addMonster,
+     updateMonster,
+
      gameLocationList,
      location,
      addLocation,

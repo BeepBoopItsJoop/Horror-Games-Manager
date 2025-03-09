@@ -30,7 +30,7 @@ const gameMonsterListGet = async (req, res) => {
 }
 
 const monsterGet = async (req, res) => {
-     const monbsters = await db.monster(req.params.monster_id);
+     const monsters = await db.monster(req.params.monster_id);
 
      res.render('lists/monsterList', {
           title: monsters[0].name,
@@ -106,6 +106,23 @@ const locationCreatePost = async (req, res) => {
      res.redirect(`/games/${id}/locations`);
 }
 
+const monsterUpdateGet = async (req,res) => {
+     const monster = (await db.monster(req.params.monster_id))[0];
+     monster.id = req.params.monster_id;
+
+     res.render("update/updateMonster", {
+          title: `Update ${monster.name}`,
+          monster: monster,
+     });
+}
+
+const monsterUpdatePost = async (req,res) => {
+     const { name, description, id } = req.body;
+     // TODO: add validation
+     // await db.updateMonster({name, description, id});
+     res.redirect(`/games/monsters/${id}`);
+}
+
 module.exports = {
      gameListGet,
      gameGet,
@@ -113,10 +130,14 @@ module.exports = {
      monsterGet,
      gameLocationListGet,
      locationGet,
+
      gameCreateGet,
      gameCreatePost,
      monsterCreateGet,
      monsterCreatePost,
      locationCreateGet,
      locationCreatePost,
+
+     monsterUpdateGet,
+     monsterUpdatePost,
 };

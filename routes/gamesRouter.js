@@ -13,7 +13,11 @@ gamesRouter.get("/:id/monsters", gamesController.gameMonsterListGet);
 gamesRouter.get("/:id/monsters/new", gamesController.monsterCreateGet);
 gamesRouter.post("/:id/monsters/new", gamesController.monsterCreatePost);
 gamesRouter.get("/:id/monsters/:monster_id", gamesController.monsterGet);
+gamesRouter.get("/:id/monsters/:monster_id/modify", gamesController.monsterUpdateGet);
+gamesRouter.post("/:id/monsters/:monster_id/modify", gamesController.monsterUpdatePost);
 gamesRouter.get("/monsters/:monster_id", gamesController.monsterGet);
+gamesRouter.get("/monsters/:monster_id/modify", gamesController.monsterUpdateGet);
+gamesRouter.post("/monsters/:monster_id/modify", gamesController.monsterUpdatePost);
 
 gamesRouter.get("/:id/locations", gamesController.gameLocationListGet);
 gamesRouter.get("/:id/locations/new", gamesController.locationCreateGet);
