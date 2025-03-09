@@ -10,6 +10,8 @@ gamesRouter.post("/new", gamesController.gameCreatePost);
 gamesRouter.get("/:id", gamesController.gameGet);
 
 gamesRouter.get("/:id/monsters", gamesController.gameMonsterListGet);
+gamesRouter.get("/:id/monsters/new", gamesController.monsterCreateGet);
+gamesRouter.post("/:id/monsters/new", gamesController.monsterCreatePost);
 gamesRouter.get("/:id/monsters/:monster_id", gamesController.monsterGet);
 gamesRouter.get("/monsters/:monster_id", gamesController.monsterGet);
 

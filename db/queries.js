@@ -54,6 +54,15 @@ const monster = async (id) => {
      return rows;
 }
 
+const addMonster = async ({name, description, id}) => {
+     const SQL = `
+     INSERT INTO monsters (name, description, game_id)
+     VALUES ($1, $2, $3);
+     `;
+
+     await pool.query(SQL, [name, description, id]);
+}
+
 const developerList = async () => {
      const { rows } = await pool.query('SELECT developers.id, developers.name, developers.country FROM developers');
      return rows;
@@ -114,10 +123,6 @@ const location = async (id) => {
      return rows;
 }
 
-// const insertUsername = async (username) => {
-//      await pool.query("INSERT INTO usernames (username) VALUES ($1)", [username]);
-// }
-
 module.exports = {
      developerList,
      developer,
@@ -128,6 +133,7 @@ module.exports = {
      addGame,
      gameMonsterList,
      monster,
+     addMonster,
      gameLocationList,
      location,
 };
