@@ -123,6 +123,15 @@ const location = async (id) => {
      return rows;
 }
 
+const addLocation = async ({name, description, id}) => {
+     const SQL = `
+     INSERT INTO locations (name, description, game_id)
+     VALUES ($1, $2, $3);
+     `;
+
+     await pool.query(SQL, [name, description, id]);
+}
+
 module.exports = {
      developerList,
      developer,
@@ -136,5 +145,6 @@ module.exports = {
      addMonster,
      gameLocationList,
      location,
+     addLocation,
 };
 

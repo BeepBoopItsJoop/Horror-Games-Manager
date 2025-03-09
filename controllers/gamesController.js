@@ -91,6 +91,21 @@ const monsterCreatePost = (req, res) => {
      res.redirect(`/games/${id}/monsters`);
 }
 
+const locationCreateGet = (req, res) => {
+     res.render('createLocation', {
+          title: 'Add a new location',
+          id: req.params.id,
+     });
+}
+
+const locationCreatePost = (req, res) => {
+     const {name, description} = req.body;
+     const id = req.params.id;
+     // TODO: add validation
+     // db.addLocation({name, description, id});
+     res.redirect(`/games/${id}/locations`);
+}
+
 module.exports = {
      gameListGet,
      gameGet,
@@ -102,4 +117,6 @@ module.exports = {
      gameCreatePost,
      monsterCreateGet,
      monsterCreatePost,
+     locationCreateGet,
+     locationCreatePost,
 };

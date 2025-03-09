@@ -16,6 +16,8 @@ gamesRouter.get("/:id/monsters/:monster_id", gamesController.monsterGet);
 gamesRouter.get("/monsters/:monster_id", gamesController.monsterGet);
 
 gamesRouter.get("/:id/locations", gamesController.gameLocationListGet);
+gamesRouter.get("/:id/locations/new", gamesController.locationCreateGet);
+gamesRouter.post("/:id/locations/new", gamesController.locationCreatePost);
 gamesRouter.get("/:id/locations/:location_id", gamesController.locationGet);
 gamesRouter.get("/locations/:location_id", gamesController.locationGet);
 
