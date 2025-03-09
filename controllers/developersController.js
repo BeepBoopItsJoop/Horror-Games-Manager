@@ -37,9 +37,30 @@ const developerCreatePost = (req, res) => {
      res.redirect("/developers");
 }
 
+const developerUpdateGet = async (req, res) => {
+     const developer = (await db.developer(req.params.id))[0];
+     developer.id = req.params.id;
+
+     
+     res.render("update/updateDeveloper", {
+          title: `Update ${developer.name}`,
+          developer: developer,
+     });
+}
+
+const developerUpdatePost = async (req, res) => {
+     const { name, country, id } = req.body;
+     // TODO: add validation
+     // await db.updateDeveloper({name, country, id});
+     res.redirect(`/developers/${id}`);
+
+}
+
 module.exports = {
      developerListGet,
      developerGet,
      developerCreateGet,
      developerCreatePost,
+     developerUpdateGet,
+     developerUpdatePost,
 };

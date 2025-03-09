@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title><%= title %></title>
+</head>
+<body>
+     <%- include('../partials/nav') %>
+
+     <h1><%= title %></h1>
+     
+     <form action="/developers/<%= developer.id %>/modify" method="post">
+          <label for="name">Name of developer: </label>
+          <input type="text" name="name" id="name" value="<%= developer.name %>" required> <br>
+
+          <label for="country">Country of origin: </label>
+          <input type="text" name="country" id="country" value="<%= developer.country %>" required> <br>
+
+          <!-- Hidden input field to include developer id in the POST request -->
+          <input type="hidden" name="id" value="<%= developer.id %>">
+
+          <button type="submit">Modify developer</button>
+
+     </form>
+
+     <a href="/developers<%= developer.id %>">Back to developer</a>
+
+</body>
+</html> 

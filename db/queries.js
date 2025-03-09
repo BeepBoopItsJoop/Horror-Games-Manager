@@ -87,6 +87,16 @@ const addDeveloper = async ({name, country}) => {
      await pool.query(SQL, [name, country]);
 }
 
+const updateDeveloper = async ({name, country, id}) => {
+     const SQL = `
+     UPDATE developers 
+     SET name = $1, country = $2
+     WHERE id = $3;
+     `;
+     
+     await pool.query(SQL, [name, country, id]);
+}
+
 const developerGameList = async (dev_id) => {
      const SQL = `
      SELECT games.title, games.release_date, games.id
@@ -136,6 +146,7 @@ module.exports = {
      developerList,
      developer,
      addDeveloper,
+     updateDeveloper,
      developerGameList,
      gameList,
      game,
