@@ -30,7 +30,7 @@ const gameMonsterListGet = async (req, res) => {
 }
 
 const monsterGet = async (req, res) => {
-     const monsters = await db.monster(req.params.monster_id);
+     const monbsters = await db.monster(req.params.monster_id);
 
      res.render('lists/monsterList', {
           title: monsters[0].name,
@@ -67,11 +67,11 @@ const gameCreateGet = async (req, res) => {
      });
 }
 
-const gameCreatePost = (req, res) => {
+const gameCreatePost = async (req, res) => {
 
      const {title, release_date, developer} = req.body;
      // TODO: add validation
-     // db.addGame({title, release_date, developer});
+     // await db.addGame({title, release_date, developer});
      res.redirect("/games");
 
 }
@@ -83,11 +83,11 @@ const monsterCreateGet = (req, res) => {
      });
 }
 
-const monsterCreatePost = (req, res) => {
+const monsterCreatePost = async (req, res) => {
      const {name, description} = req.body;
      const id = req.params.id;
      // TODO: add validation
-     // db.addMonster({name, description, id});
+     // await db.addMonster({name, description, id});
      res.redirect(`/games/${id}/monsters`);
 }
 
@@ -98,11 +98,11 @@ const locationCreateGet = (req, res) => {
      });
 }
 
-const locationCreatePost = (req, res) => {
+const locationCreatePost = async (req, res) => {
      const {name, description} = req.body;
      const id = req.params.id;
      // TODO: add validation
-     // db.addLocation({name, description, id});
+     // await db.addLocation({name, description, id});
      res.redirect(`/games/${id}/locations`);
 }
 

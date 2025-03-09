@@ -24,16 +24,16 @@ const developerGet = async (req, res) => {
      });
 }
 
-const developerCreateGet = async (req, res) => {
+const developerCreateGet = (req, res) => {
      res.render("create/createDeveloper", {
           title: "Create developer",
      });
 }
 
-const developerCreatePost = (req, res) => {
+const developerCreatePost = async (req, res) => {
      const {name, country} = req.body;
      // TODO: add validation
-     // db.addDeveloper({name, country});
+     // await db.addDeveloper({name, country});
      res.redirect("/developers");
 }
 
@@ -41,7 +41,6 @@ const developerUpdateGet = async (req, res) => {
      const developer = (await db.developer(req.params.id))[0];
      developer.id = req.params.id;
 
-     
      res.render("update/updateDeveloper", {
           title: `Update ${developer.name}`,
           developer: developer,
