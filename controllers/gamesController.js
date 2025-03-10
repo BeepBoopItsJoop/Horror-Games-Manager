@@ -18,7 +18,7 @@ const gameGet = async (req, res) => {
      });
 }
 
-const gameModifyGet = async (req, res) => {
+const gameUpdateGet = async (req, res) => {
      const game = (await db.game(req.params.id))[0];
      game.id = req.params.id;
 
@@ -31,7 +31,7 @@ const gameModifyGet = async (req, res) => {
      });
 }
 
-const gameModifyPost = async (req, res) => {
+const gameUpdatePost = async (req, res) => {
      const { title, release_date, developer_id, id } = req.body;
      // TODO: add validation
      // await db.updateGame({title, release_date, developer_id, id});
@@ -107,7 +107,7 @@ const monsterCreatePost = async (req, res) => {
      const {name, description} = req.body;
      const id = req.params.id;
      // TODO: add validation
-     // await db.addMonster({name, description, id});
+     await db.addMonster({name, description, id});
      res.redirect(`/games/${id}/monsters`);
 }
 
@@ -160,6 +160,23 @@ const locationUpdatePost = async (req, res) => {
      res.redirect(`/games/locations/${id}`);
 }
 
+const monsterDeleteGet = async (req, res) => {
+     const monster = (await db.monster(req.params.monster_id))[0];
+     monster.id = req.params.monster_id;
+
+     res.render("delete/deleteMonster", {
+          title: `Delete ${monster.name}`,
+          monster: monster,
+     });
+}
+
+const monsterDeletePost = async (req, res) => {
+     const id = req.body.id;
+     await db.deleteMonster(id);
+     // res.redirect(`/games/monsters/${id}`);
+     res.redirect(`/../..`);
+}
+
 module.exports = {
      gameListGet,
      gameGet,
@@ -175,10 +192,13 @@ module.exports = {
      locationCreateGet,
      locationCreatePost,
 
-     gameModifyGet,
-     gameModifyPost,
+     gameUpdateGet,
+     gameUpdatePost,
      monsterUpdateGet,
      monsterUpdatePost,
      locationUpdateGet,
      locationUpdatePost,
+
+     monsterDeleteGet,
+     monsterDeletePost,
 };

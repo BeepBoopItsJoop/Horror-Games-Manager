@@ -83,6 +83,15 @@ const updateMonster = async ({name, description, id}) => {
      await pool.query(SQL, [name, description, id]);
 }
 
+const deleteMonster = async (id) => {
+     const SQL = `
+     DELETE FROM monsters 
+     WHERE id = $1;
+     `;
+     
+     await pool.query(SQL, [id]);    
+}
+
 const developerList = async () => {
      const { rows } = await pool.query('SELECT developers.id, developers.name, developers.country FROM developers');
      return rows;
@@ -188,6 +197,7 @@ module.exports = {
      monster,
      addMonster,
      updateMonster,
+     deleteMonster,
 
      gameLocationList,
      location,
