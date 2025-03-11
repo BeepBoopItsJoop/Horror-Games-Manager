@@ -8,6 +8,8 @@
 <body>
      <%- include('../partials/nav') %>
 
+     <a href="/games"><b>Back to game list</b></a>
+
      <h1><%= title %></h1>
      
      <form action="/games/new" method="post">
@@ -27,8 +29,6 @@
           <button type="submit">Add game</button>
 
      </form>
-
-     <a href="/games">Back to manager</a>
 
 </body>
 </html> 

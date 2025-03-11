@@ -8,7 +8,10 @@
 <body>
      <%- include('../partials/nav') %>
 
+     <a href="/developers/<%= developer.id %>"><b>Back to developer</b></a>
+
      <h1><%= title %></h1>
+
      
      <form action="/developers/<%= developer.id %>/modify" method="post">
           <label for="name">Name of developer: </label>
@@ -23,8 +26,6 @@
           <button type="submit">Modify developer</button>
 
      </form>
-
-     <a href="/developers<%= developer.id %>">Back to developer</a>
 
 </body>
 </html> 

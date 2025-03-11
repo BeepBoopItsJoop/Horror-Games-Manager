@@ -1,7 +1,11 @@
 <li>
      <span>Location name: <%= location.name %></span> <br>
      <span>Description: <%= location.description %></span> <br>
-     <% if(location.id) { %>
-          <a href="/games/locations/<%= location.id %>">Check this location out</a>     
+
+     <% if(loneLocation) { %>
+          <a href="/games/locations/<%- location.id %>/modify">Modify this location</a> <br>
+          <a href="/games/locations/<%- location.id %>/delete">Delete this location</a> <br>
+     <% } else { %>
+          <a href="/games/<%- game.id %>/locations/<%= location.id %>">Check this location out</a> <br>
      <% } %>
 </li>

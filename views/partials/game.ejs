@@ -1,16 +1,16 @@
 <li>
-     <span>Title: <%= game.title %></span> <br>
+     <span> <b> <%= game.title %> </b> </span> <br>
      <span>Release Date: <%= new Date(game.release_date).toLocaleDateString() %></span> <br>
      <span>Developer: <%= (game.developer_name) ? game.developer_name : 'Missing' %></span> <br>
      
-     <% if(locals.loneGame) { %>
-          <a href="javascript:history.back()">
-               Go back
-          </a> <br>
+     <% if(loneGame) { %>
+          <a href="/games/<%- game.id %>/modify">Modify this game</a> <br>
+          <a href="/games/<%- game.id %>/delete">Delete this game</a> <br>
+          <br>
           <a href="/games/<%- game.id %>/monsters">Check out monsters</a> <br>
           <a href="/games/<%- game.id %>/locations">Check out locations</a> <br>
      <% } else { %>
-          <a href="/games/<%- game.id %>"> Check this game</a> <br>
+          <a href="/games/<%- game.id %>"> Go to this game</a> <br>
      <% } %>
 </li>
 

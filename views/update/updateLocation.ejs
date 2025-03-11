@@ -8,6 +8,8 @@
 <body>
      <%- include('../partials/nav') %>
 
+     <a href="/games/locations/<%= location.id %>"><b>Back to location</b></a>
+
      <h1><%= title %></h1>
      
      <form action="/games/locations/<%= location.id %>/modify" method="post">
@@ -24,7 +26,6 @@
 
      </form>
 
-     <a href="/games/locations/<%= location.id %>">Back to location</a>
 
 </body>
 </html> 

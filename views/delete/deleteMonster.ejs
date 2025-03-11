@@ -7,11 +7,11 @@
 </head>
 <body>
      <h1> <%= title %> </h1>
-     <form action="/games/monsters/<%= monster.id %>/delete" method="post">
+     <form action="/games/<%= monster.game_id %>/monsters/<%= monster.id %>/delete" method="post">
           <h2>Do you want to delete <%= monster.name %>?</h2>
 
           <button type="submit">Yes</button>
-          <button onclick="history.back()">No</button>
+          <button type="button" onclick="window.location.href='/games/<%= monster.game_id %>/monsters/<%= monster.id %>'">No</button>
 
           <!-- Hidden input field to include monster id in the POST request -->
           <input type="hidden" name="id" value="<%= monster.id %>">

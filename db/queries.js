@@ -2,7 +2,7 @@ const pool = require('./pool');
 
 const gameList = async () => {
      const SQL = `
-     SELECT games.title, games.release_date, developers.name AS developer_name, games.id
+     SELECT games.id, games.title, games.release_date, developers.name AS developer_name
      FROM games 
      LEFT JOIN developers
      ON (games.developer_id = developers.id);
@@ -15,7 +15,7 @@ const game = async (id) => {
      const SQL = `
      SELECT games.id, games.title, games.release_date, developers.name AS developer_name, developers.id as developer_id
      FROM games 
-     LEFT JOIN  developers
+     LEFT JOIN developers
      ON (games.developer_id = developers.id)
      WHERE games.id = ($1);
      `;
@@ -66,7 +66,7 @@ const gameMonsterList = async (id) => {
 
 const monster = async (id) => {
      const SQL = `
-     SELECT monsters.name, monsters.description
+     SELECT monsters.id, monsters.name, monsters.description, monsters.game_id
      FROM monsters
      WHERE monsters.id = ($1);`;
 
@@ -103,15 +103,20 @@ const deleteMonster = async (id) => {
 }
 
 const developerList = async () => {
-     const { rows } = await pool.query('SELECT developers.id, developers.name, developers.country FROM developers');
+     const SQL = `
+     SELECT developers.id, developers.name, developers.country 
+     FROM developers;
+     `
+     const { rows } = await pool.query(SQL);
+
      return rows;
 };
 
 const developer = async (id) => {
      const SQL = `
-     SELECT developers.name, developers.country
+     SELECT developers.id, developers.name, developers.country 
      FROM developers
-     WHERE developers.id = ($1);
+     WHERE developers.id = $1;
      `;
      const { rows } = await pool.query(SQL, [id]);
      return rows;
@@ -160,7 +165,7 @@ const developerGameList = async (dev_id) => {
 
 const gameLocationList = async (id) => {
      const SQL = `
-     SELECT locations.name, locations.description, locations.id
+     SELECT locations.name, locations.description, locations.id, locations.game_id
      FROM games
      JOIN locations
      ON (games.id = locations.game_id)
@@ -173,7 +178,8 @@ const gameLocationList = async (id) => {
 
 const location = async (id) => {
      const SQL = `
-     SELECT locations.name, locations.description
+     SELECT locations.id, locations.name, locations.description, locations.game_id
+
      FROM locations
      WHERE locations.id = ($1);`;
 

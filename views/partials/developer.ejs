@@ -1,11 +1,25 @@
 <li>
-     <span>Developer name: <%= dev.name %></span> <br>
-     <span>Country of origin: <%= dev.country %></span> <br>
-     <a href="/developers/<%- dev.id %>">
-          <% if(dev.id) { %>
-               Check this developer
+     <span><b> <%= developer.name %> </b> </span> <br>
+     <span>Country of origin: <%= developer.country %></span> <br>
+     
+     <% if(loneDeveloper) { %>
+          <a href="/developers/<%- developer.id %>/modify">Modify this developer</a> <br>
+          <a href="/developers/<%- developer.id %>/delete">Delete this developer</a> <br>
+     
+          <!-- games is an empty object idk why and im going crazy -->
+          <% if(Object.keys(games).length !== 0) { %>
+               <span><b>Games by <%= developer.name %></b></span> <br>
+               <br>
+               <% games.forEach(game => { %>
+                    <% game.developer_name = developer.name %>
+                    <%- include('../partials/game.ejs', {game: game, loneGame: false}) %>
+                    <br>
+               <% }) %>
           <% } else { %>
-               Go back to list
+               <span>Developer has no games</span>               
           <% } %>
-     </a> <br>
+     <% } else { %>
+          <a href="/developers/<%- developer.id %>"> Check this developer</a> <br>
+          <br>
+     <% } %>
 </li>

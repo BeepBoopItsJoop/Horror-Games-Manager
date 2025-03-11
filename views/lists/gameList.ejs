@@ -8,16 +8,21 @@
 <body>
      <%- include('../partials/nav.ejs'); %>
 
-     
-     <% if(!locals.games) { %>
-          <span>No games were found, this shouldnt happen</span>
-          <% } else {%>
-               <% if(locals.games.length !== 1) { %>
-                    <a href="/developers">Check out the developers</a> <br>
-               <% } %>
-               <% games.forEach(game => { %>
-                    <%- include('../partials/game.ejs', {game: game, loneGame: (games.length === 1)}); %>
-               <% }) %>
-          <% } %>
+     <% if(games.length === 0) { %>
+          <a href="/"><b>Go back</b></a>
+          <span>No games have been found</span> <br>
+     <% } else if (games.length > 1) { %>
+          <a href="/developers"> <b> Check out the developers </b> </a> <br>
+          <a href="/games/new/"><b> Add a game </b></a> <br>
+          <br>
+          <% games.forEach(game => { %>
+               <%- include('../partials/game.ejs', {game: game, loneGame: false}); %>
+               <br>
+          <% }) %>
+     <% } else { %>
+          <a href="/games/"><b>Go to games list</b></a> <br>
+          <br>
+          <%- include('../partials/game.ejs', {game: games[0], loneGame: true}); %>
+     <% } %>
 </body>
 </html>

@@ -1,7 +1,11 @@
 <li>
-     <span>Monster name: <%= monster.name %></span> <br>
+     <span><b><%= monster.name %></b></span> <br>
      <span>Description: <%= monster.description %></span> <br>
-     <% if(monster.id) { %>
-          <a href="/games/monsters/<%= monster.id %>">Check this monster out</a>     
+     
+     <% if(loneMonster) { %>
+          <a href="/games/monsters/<%- monster.id %>/modify">Modify this monster</a> <br>
+          <a href="/games/monsters/<%- monster.id %>/delete">Delete this monster</a> <br>
+     <% } else { %>
+          <a href="/games/<%- game.id %>/monsters/<%= monster.id %>">Check this monster out</a> <br>
      <% } %>
 </li>

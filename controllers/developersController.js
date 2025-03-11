@@ -6,19 +6,18 @@ const developerListGet = async (req, res) => {
      res.render('lists/developerList', {
           title: 'Developer List',
           developers: developers,
-          id: req.params.id,
      });
 }
 
 const developerGet = async (req, res) => {
      const developers = await db.developer(req.params.id);
-     let games = null;
+     let games = undefined;
      if (developers.length === 1) {
           games = await db.developerGameList(req.params.id);
      }     
 
      res.render('lists/developerList', {
-          title: 'Developer List',
+          title: developers[0].name,
           developers: developers,
           games: games,
      });
@@ -33,7 +32,7 @@ const developerCreateGet = (req, res) => {
 const developerCreatePost = async (req, res) => {
      const {name, country} = req.body;
      // TODO: add validation
-     await db.addDeveloper({name, country});
+     // await db.addDeveloper({name, country});
      res.redirect("/developers");
 }
 
@@ -67,7 +66,7 @@ const developerDeleteGet = async (req, res) => {
 const developerDeletePost = async (req, res) => {
      const id = req.body.id;
      // TODO: add validation
-     await db.deleteDeveloper(id);
+     // await db.deleteDeveloper(id);
      res.redirect(`/../../`);
 }
 

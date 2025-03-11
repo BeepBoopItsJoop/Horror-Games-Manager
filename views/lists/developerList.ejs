@@ -8,20 +8,21 @@
 <body>
      <%- include('../partials/nav.ejs'); %>
 
-     <% if(!locals.developers) { %>
-          <span>No developers were found, this shouldnt happen</span>
-     <% } else {%>
-          <% locals.developers.forEach(dev => { %>
-               <%- include('../partials/developer.ejs', {dev: dev}); %>
-          <% }) %>
+     <% if(developers.length === 0) { %>
+          <a href="/games"><b>Go back to games</b></a>
+          <span>No developers have been found</span> <br>
+     <% } else if (developers.length > 1) { %>
+          <a href="/games"> <b> Go back to games </b> </a> <br>
+          <a href="/developers/new/"><b> Add a developer </b></a> <br>
           <br>
-          <!-- would happen only if there is one developer -->
-          <% if(locals.games) { %> 
-               <h2>Games by <%= developers[0].name %></h2>
-               <% locals.games.forEach(game => { %>
-                    <%- include('../partials/game.ejs', {game: game}) %>
-               <% }) %>
-          <% } %>
+          <% developers.forEach(developer => { %>
+               <%- include('../partials/developer.ejs', {developer: developer, loneDeveloper: false}); %>
+               <br>
+          <% }) %>
+     <% } else { %>
+          <a href="/developers/"><b>Go back to developers</b></a> <br>
+          <br>
+          <%- include('../partials/developer.ejs', {developer: developers[0], games: games, loneDeveloper: true}); %>
      <% } %>
      </body>
 </html>

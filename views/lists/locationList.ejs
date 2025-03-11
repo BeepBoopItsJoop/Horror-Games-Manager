@@ -8,16 +8,22 @@
 <body>
      <%- include('../partials/nav.ejs'); %>
 
-     <% if(locations.length > 1) { %>
-          <h1>Locations in <%= locals.gameTitle %></h1>
+     <% if(locations.length === 0) { %>
+          <a href="/games/<%- game.id %>/"><b>Go back</b></a> <br>
+          <span>No locations have been found</span> <br>
+          <a href="/games/<%- game.id %>/locations/new/"><b> Add a location </b></a> <br>
+     <% } else if(locations.length > 1) { %>
+          <a href="/games/<%- game.id %>/"><b> Go back </b></a> <br>
+          <a href="/games/<%- game.id %>/locations/new/"><b> Add a location </b></a> <br>
+          <br>
+          <% locations.forEach(location => { %>
+               <%- include('../partials/location.ejs', {location: location, game: game, loneLocation: false}); %>
+               <br>
+          <% }) %>
+     <% } else { %>
+          <a href="/games/<%- locations[0].game_id %>/locations"><b>Go back</b></a> <br>
+          <br>
+          <%- include('../partials/location.ejs', {location: locations[0], loneLocation: true}); %>
      <% } %>
-
-     <% if(!locals.locations) { %>
-          <span>No locations were found, this shouldnt happen</span>
-     <% } else %>
-     <% locations.forEach(location => { %>
-          <%- include('../partials/location.ejs', {location: location}); %>
-     <% }) %>
-     <a href="javascript:history.back();">Go back</a>
      </body>
 </html>

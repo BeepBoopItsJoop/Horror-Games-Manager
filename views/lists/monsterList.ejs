@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
      <meta charset="UTF-8">
@@ -8,16 +8,22 @@
 <body>
      <%- include('../partials/nav.ejs'); %>
 
-     <% if(monsters.length > 1) { %>
-          <h1>Monsters in <%= locals.gameTitle %></h1>
+     <% if(monsters.length === 0) { %>
+          <a href="/games/<%- game.id %>/"><b>Go back</b></a> <br>
+          <span>No monsters have been found</span> <br>
+          <a href="/games/<%- game.id %>/monsters/new/"><b> Add a monster </b></a> <br>
+     <% } else if(monsters.length > 1) { %>
+          <a href="/games/<%- game.id %>/"><b> Go back </b></a> <br>
+          <a href="/games/<%- game.id %>/monsters/new/"><b> Add a monster </b></a> <br>
+          <br>
+          <% monsters.forEach(monster => { %>
+               <%- include('../partials/monster.ejs', {monster: monster, game: game, loneMonster: false}); %>
+               <br>
+          <% }) %>
+     <% } else { %>
+          <a href="/games/<%- monsters[0].game_id %>/monsters"><b>Go back</b></a> <br>
+          <br>
+          <%- include('../partials/monster.ejs', {monster: monsters[0], loneMonster: true}); %>
      <% } %>
-
-     <% if(!locals.monsters) { %>
-          <span>No monsters were found, this shouldnt happen</span>
-     <% } else %>
-     <% monsters.forEach(monster => { %>
-          <%- include('../partials/monster.ejs', {monster: monster}); %>
-     <% }) %>
-     <a href="javascript:history.back();">Go back</a>
      </body>
 </html>

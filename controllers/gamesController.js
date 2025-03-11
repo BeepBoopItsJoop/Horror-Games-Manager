@@ -6,7 +6,6 @@ const gameListGet = async (req, res) => {
      res.render('lists/gameList', {
           title: 'Game list',
           games: games,
-          id: req.params.id,
      });
 }
 
@@ -40,12 +39,12 @@ const gameUpdatePost = async (req, res) => {
 
 const gameMonsterListGet = async (req, res) => {
      const monsters = await db.gameMonsterList(req.params.id);
-     const games = await db.game(req.params.id);
+     const game = (await db.game(req.params.id))[0];
 
      res.render('lists/monsterList', {
-          title: games[0].title,
-          gameTitle: games[0].title,
+          title: game.title,
           monsters: monsters,
+          game: game,
      });
 }
 
@@ -60,12 +59,12 @@ const monsterGet = async (req, res) => {
 
 const gameLocationListGet = async (req, res) => {
      const locations = await db.gameLocationList(req.params.id);
-     const games = await db.game(req.params.id);
+     const game = (await db.game(req.params.id))[0];
 
      res.render('lists/locationList', {
-          title: games[0].title,
-          gameTitle: games[0].title,
+          title: game.title,
           locations: locations,
+          game:game,
      });
 }
 
@@ -91,7 +90,7 @@ const gameCreatePost = async (req, res) => {
 
      const {title, release_date, developer} = req.body;
      // TODO: add validation
-     await db.addGame({title, release_date, developer});
+     // await db.addGame({title, release_date, developer});
      res.redirect("/games");
 
 }
@@ -172,8 +171,9 @@ const monsterDeleteGet = async (req, res) => {
 
 const monsterDeletePost = async (req, res) => {
      const id = req.body.id;
+     const monster = (await db.monster(id))[0];
      // await db.deleteMonster(id);
-     res.redirect(`/../..`);
+     res.redirect(`/games/${monster.game_id}/monsters`);
 }
 
 const locationDeleteGet = async (req, res) => {
@@ -182,14 +182,15 @@ const locationDeleteGet = async (req, res) => {
 
      res.render("delete/deleteLocation", {
           title: `Delete ${location.name}`,
-          monster: location,
+          location: location,
      });
 }
 
 const locationDeletePost = async (req, res) => {
      const id = req.body.id;
+     const location = (await db.location(id))[0];
      // await db.deleteLocation(id);
-     res.redirect(`/../..`);
+     res.redirect(`/games/${location.game_id}/locations`);
 }
 
 const gameDeleteGet = async (req, res) => {
