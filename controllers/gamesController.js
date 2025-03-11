@@ -107,7 +107,7 @@ const monsterCreatePost = async (req, res) => {
      const {name, description} = req.body;
      const id = req.params.id;
      // TODO: add validation
-     await db.addMonster({name, description, id});
+     // await db.addMonster({name, description, id});
      res.redirect(`/games/${id}/monsters`);
 }
 
@@ -173,17 +173,33 @@ const monsterDeleteGet = async (req, res) => {
 const monsterDeletePost = async (req, res) => {
      const id = req.body.id;
      await db.deleteMonster(id);
-     // res.redirect(`/games/monsters/${id}`);
+     res.redirect(`/../..`);
+}
+
+const locationDeleteGet = async (req, res) => {
+     const location = (await db.location(req.params.location_id))[0];
+     location.id = req.params.location_id;
+
+     res.render("delete/deleteLocation", {
+          title: `Delete ${location.name}`,
+          monster: location,
+     });
+}
+
+const locationDeletePost = async (req, res) => {
+     const id = req.body.id;
+     // await db.deleteLocation(id);
      res.redirect(`/../..`);
 }
 
 module.exports = {
-     gameListGet,
      gameGet,
-     gameMonsterListGet,
      monsterGet,
-     gameLocationListGet,
      locationGet,
+
+     gameListGet,
+     gameMonsterListGet,
+     gameLocationListGet,
 
      gameCreateGet,
      gameCreatePost,
@@ -201,4 +217,6 @@ module.exports = {
 
      monsterDeleteGet,
      monsterDeletePost,
+     locationDeleteGet,
+     locationDeletePost,
 };

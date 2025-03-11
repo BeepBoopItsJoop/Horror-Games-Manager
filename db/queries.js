@@ -181,6 +181,13 @@ const updateLocation = async ({name, description, id}) => {
      await pool.query(SQL, [name, description, id]);
 }
 
+const deleteLocation = async (id) => {
+     const SQL = `
+     DELETE FROM locations 
+     WHERE id = $1;
+     `;
+}    
+
 module.exports = {
      developerList,
      developer,
@@ -203,5 +210,6 @@ module.exports = {
      location,
      addLocation,
      updateLocation,
+     deleteLocation,
 };
 
