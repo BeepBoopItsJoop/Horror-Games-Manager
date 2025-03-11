@@ -15,7 +15,7 @@ const game = async (id) => {
      const SQL = `
      SELECT games.id, games.title, games.release_date, developers.name AS developer_name, developers.id as developer_id
      FROM games 
-     JOIN  developers
+     LEFT JOIN  developers
      ON (games.developer_id = developers.id)
      WHERE games.id = ($1);
      `;
