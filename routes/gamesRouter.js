@@ -12,6 +12,8 @@ gamesRouter.post("/new", gamesController.gameCreatePost);
 gamesRouter.get("/:id", gamesController.gameGet);
 gamesRouter.get("/:id/modify", gamesController.gameUpdateGet);
 gamesRouter.post("/:id/modify", gamesController.gameUpdatePost);
+gamesRouter.get("/:id/delete", gamesController.gameDeleteGet);
+gamesRouter.post("/:id/delete", gamesController.gameDeletePost);
 
 
 gamesRouter.get("/:id/monsters", gamesController.gameMonsterListGet);

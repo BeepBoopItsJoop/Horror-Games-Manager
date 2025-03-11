@@ -186,7 +186,18 @@ const deleteLocation = async (id) => {
      DELETE FROM locations 
      WHERE id = $1;
      `;
+     await pool.query(SQL, [id]);
 }    
+
+// Also deletes game's locations and monsters
+const deleteGame = async (id) => {
+     const SQL = `
+     DELETE FROM games 
+     WHERE id = $1;
+     `;
+     
+     await pool.query(SQL, [id]);   
+}
 
 module.exports = {
      developerList,
@@ -199,6 +210,7 @@ module.exports = {
      game,
      addGame,
      updateGame,
+     deleteGame,
 
      gameMonsterList,
      monster,

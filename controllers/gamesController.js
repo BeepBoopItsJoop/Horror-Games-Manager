@@ -156,7 +156,7 @@ const locationUpdateGet = async (req, res) => {
 const locationUpdatePost = async (req, res) => {
      const { name, description, id } = req.body;
      // TODO: add validation
-     await db.updateLocation({name, description, id});
+     // await db.updateLocation({name, description, id});
      res.redirect(`/games/locations/${id}`);
 }
 
@@ -172,7 +172,7 @@ const monsterDeleteGet = async (req, res) => {
 
 const monsterDeletePost = async (req, res) => {
      const id = req.body.id;
-     await db.deleteMonster(id);
+     // await db.deleteMonster(id);
      res.redirect(`/../..`);
 }
 
@@ -190,6 +190,23 @@ const locationDeletePost = async (req, res) => {
      const id = req.body.id;
      // await db.deleteLocation(id);
      res.redirect(`/../..`);
+}
+
+const gameDeleteGet = async (req, res) => {
+     const id = req.params.id;
+     const game = (await(db.game(id)))[0];
+     game.id = id;
+
+res.render('delete/deleteGame', {
+          title: `Delete ${game.title}`,
+          game: game,
+     });
+}
+
+const gameDeletePost = async (req, res) => {
+     const id = req.body.id;
+     // await db.deleteGame(id);
+     res.redirect('/../..');
 }
 
 module.exports = {
@@ -215,6 +232,8 @@ module.exports = {
      locationUpdateGet,
      locationUpdatePost,
 
+     gameDeleteGet,
+     gameDeletePost,
      monsterDeleteGet,
      monsterDeletePost,
      locationDeleteGet,
