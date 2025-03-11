@@ -1,7 +1,7 @@
 <li>
      <span>Title: <%= game.title %></span> <br>
      <span>Release Date: <%= new Date(game.release_date).toLocaleDateString() %></span> <br>
-     <span>Developer: <%= game.developer_name %></span> <br>
+     <span>Developer: <%= (game.developer_name) ? game.developer_name : 'Missing' %></span> <br>
      
      <% if(locals.loneGame) { %>
           <a href="javascript:history.back()">

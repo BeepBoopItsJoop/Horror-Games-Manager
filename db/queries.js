@@ -4,7 +4,7 @@ const gameList = async () => {
      const SQL = `
      SELECT games.title, games.release_date, developers.name AS developer_name, games.id
      FROM games 
-     JOIN  developers
+     LEFT JOIN developers
      ON (games.developer_id = developers.id);
      `
      const { rows } = await pool.query(SQL);
@@ -40,6 +40,16 @@ const updateGame = async ({title, release_date, developer_id, id}) => {
      `;
      
      await pool.query(SQL, [title, release_date, developer_id, id]);
+}
+
+// Also deletes game's locations and monsters
+const deleteGame = async (id) => {
+     const SQL = `
+     DELETE FROM games 
+     WHERE id = $1;
+     `;
+     
+     await pool.query(SQL, [id]);   
 }
 
 const gameMonsterList = async (id) => {
@@ -126,6 +136,15 @@ const updateDeveloper = async ({name, country, id}) => {
      await pool.query(SQL, [name, country, id]);
 }
 
+const deleteDeveloper = async (id) => {
+     const SQL = `
+     DELETE FROM developers
+     WHERE id = $1;
+     `;
+
+     await pool.query(SQL, [id]);
+}
+
 const developerGameList = async (dev_id) => {
      const SQL = `
      SELECT games.title, games.release_date, games.id
@@ -189,21 +208,12 @@ const deleteLocation = async (id) => {
      await pool.query(SQL, [id]);
 }    
 
-// Also deletes game's locations and monsters
-const deleteGame = async (id) => {
-     const SQL = `
-     DELETE FROM games 
-     WHERE id = $1;
-     `;
-     
-     await pool.query(SQL, [id]);   
-}
-
 module.exports = {
      developerList,
      developer,
      addDeveloper,
      updateDeveloper,
+     deleteDeveloper,
      
      developerGameList,
      gameList,

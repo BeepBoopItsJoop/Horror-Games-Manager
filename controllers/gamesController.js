@@ -91,7 +91,7 @@ const gameCreatePost = async (req, res) => {
 
      const {title, release_date, developer} = req.body;
      // TODO: add validation
-     // await db.addGame({title, release_date, developer});
+     await db.addGame({title, release_date, developer});
      res.redirect("/games");
 
 }

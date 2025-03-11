@@ -33,7 +33,7 @@ const developerCreateGet = (req, res) => {
 const developerCreatePost = async (req, res) => {
      const {name, country} = req.body;
      // TODO: add validation
-     // await db.addDeveloper({name, country});
+     await db.addDeveloper({name, country});
      res.redirect("/developers");
 }
 
@@ -55,6 +55,22 @@ const developerUpdatePost = async (req, res) => {
 
 }
 
+const developerDeleteGet = async (req, res) => {
+     const developer = (await db.developer(req.params.id))[0];
+     developer.id = req.params.id;
+
+     res.render("delete/deleteDeveloper", {
+          title: `Delete ${developer.name}`,
+          developer: developer,
+     });
+}
+const developerDeletePost = async (req, res) => {
+     const id = req.body.id;
+     // TODO: add validation
+     await db.deleteDeveloper(id);
+     res.redirect(`/../../`);
+}
+
 module.exports = {
      developerListGet,
      developerGet,
@@ -62,4 +78,6 @@ module.exports = {
      developerCreatePost,
      developerUpdateGet,
      developerUpdatePost,
+     developerDeleteGet,
+     developerDeletePost,
 };
