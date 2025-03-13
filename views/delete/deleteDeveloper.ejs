@@ -7,6 +7,9 @@
 </head>
 <body>
      <h1> <%= title %> </h1>
+
+     <%- include("../partials/errors") %>
+
      <form action="/developers/<%= developer.id %>/delete" method="post">
           <h2>Do you want to delete <%= developer.name %>?</h2>
 

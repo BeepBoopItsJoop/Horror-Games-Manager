@@ -82,6 +82,7 @@ const developerUpdateGet = async (req, res) => {
 const developerUpdatePost = [
      validateDeveloper,
      validateID,
+     // TODO: Validate if user can update
      async (req, res) => {
           const developer = (await db.developer(req.params.id))[0];
           const errors = validationResult(req);
@@ -101,7 +102,6 @@ const developerUpdatePost = [
 
 const developerDeleteGet = async (req, res) => {
      const developer = (await db.developer(req.params.id))[0];
-     developer.id = req.params.id;
 
      res.render("delete/deleteDeveloper", {
           title: `Delete ${developer.name}`,
@@ -109,12 +109,25 @@ const developerDeleteGet = async (req, res) => {
      });
 }
 
-const developerDeletePost = async (req, res) => {
-     const id = req.body.id;
-     // TODO: add validation
-     // await db.deleteDeveloper(id);
-     res.redirect(`/../../`);
-}
+const developerDeletePost = [
+     // TODO: Validate if user can delete
+     validateID,
+     async (req, res) => {
+          const developer = (await db.developer(req.params.id))[0];
+          const errors = validationResult(req);
+          if (!errors.isEmpty()) {
+               return res.status(400).render("delete/deleteDeveloper", {
+                    title: `Delete ${developer.name}`,
+                    errors: errors.array(),
+                    developer: developer,
+               });
+          }
+
+          const id = req.body.id;
+          await db.deleteDeveloper(id);
+          res.redirect(`/../../`);
+     }
+];
 
 module.exports = {
      developerListGet,
