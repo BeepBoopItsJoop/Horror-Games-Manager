@@ -63,9 +63,9 @@ const developerUpdatePost = [
      validateID,
      // TODO: Validate if user can update
      async (req, res) => {
-          const developer = (await db.developer(req.params.id))[0];
           const errors = validationResult(req);
           if (!errors.isEmpty()) {
+               const developer = (await db.developer(req.params.id))[0];
                return res.status(400).render("update/updateDeveloper", {
                     title: `Update ${developer.name}`,
                     errors: errors.array(),
@@ -92,9 +92,9 @@ const developerDeletePost = [
      // TODO: Validate if user can delete
      validateID,
      async (req, res) => {
-          const developer = (await db.developer(req.params.id))[0];
           const errors = validationResult(req);
           if (!errors.isEmpty()) {
+               const developer = (await db.developer(req.params.id))[0];
                return res.status(400).render("delete/deleteDeveloper", {
                     title: `Delete ${developer.name}`,
                     errors: errors.array(),
