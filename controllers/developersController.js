@@ -60,12 +60,14 @@ const developerUpdateGet = async (req, res) => {
 
 const developerUpdatePost = [
      validateDeveloper,
-     validateID,
-     // TODO: Validate if user can update
+     // TODO: Check if user has rights to update
      async (req, res) => {
+          const id = req.params.id;
+
           const errors = validationResult(req);
           if (!errors.isEmpty()) {
-               const developer = (await db.developer(req.params.id))[0];
+               const developer = (await db.developer(id))[0];
+               
                return res.status(400).render("update/updateDeveloper", {
                     title: `Update ${developer.name}`,
                     errors: errors.array(),
@@ -73,7 +75,7 @@ const developerUpdatePost = [
                });
           }
 
-          const { name, country, id } = req.body;
+          const { name, country } = req.body;
           await db.updateDeveloper({name, country, id});
           res.redirect(`/developers/${id}`);
      }
@@ -89,12 +91,14 @@ const developerDeleteGet = async (req, res) => {
 }
 
 const developerDeletePost = [
-     // TODO: Validate if user can delete
-     validateID,
+     // TODO: Check if user has right to delete
      async (req, res) => {
+          const id = req.params.id;
+
           const errors = validationResult(req);
           if (!errors.isEmpty()) {
-               const developer = (await db.developer(req.params.id))[0];
+               const developer = (await db.developer(id))[0];
+
                return res.status(400).render("delete/deleteDeveloper", {
                     title: `Delete ${developer.name}`,
                     errors: errors.array(),
@@ -102,7 +106,6 @@ const developerDeletePost = [
                });
           }
 
-          const id = req.body.id;
           await db.deleteDeveloper(id);
           res.redirect(`/developers/`);
      }
