@@ -1,5 +1,19 @@
 const db = require('../db/queries');
 
+const { body, validationResult } = require("express-validator"); 
+
+const alphaErr = 'must only contain letters';
+const nameLengthErr = "must be between 1 and 50 characters.";
+
+const validateDeveloper = [
+     body("name").trim()
+          .isAlpha().withMessage(`Developer name ${alphaErr}`)
+          .isLength({ min: 1, max: 50 }).withMessage(`Developer name ${nameLengthErr}`),
+          body("country").trim()
+          .isAlpha().withMessage(`Country ${alphaErr}`)
+          .isLength({ min: 1, max: 50 }).withMessage(`Country ${nameLengthErr}`),
+];
+
 const developerListGet = async (req, res) => {
      const developers = await db.developerList();
 
@@ -29,12 +43,22 @@ const developerCreateGet = (req, res) => {
      });
 }
 
-const developerCreatePost = async (req, res) => {
-     const {name, country} = req.body;
-     // TODO: add validation
-     // await db.addDeveloper({name, country});
-     res.redirect("/developers");
-}
+const developerCreatePost = [
+     validateDeveloper,
+     async (req, res) => {
+          const errors = validationResult(req);
+          if (!errors.isEmpty()) {
+               return res.status(400).render("create/createDeveloper", {
+                    title: "Create developer",
+                    errors: errors.array(),
+               });
+          }
+
+          const {name, country} = req.body;
+          // await db.addDeveloper({name, country});
+          res.redirect("/developers");
+     }
+];
 
 const developerUpdateGet = async (req, res) => {
      const developer = (await db.developer(req.params.id))[0];
@@ -63,6 +87,7 @@ const developerDeleteGet = async (req, res) => {
           developer: developer,
      });
 }
+
 const developerDeletePost = async (req, res) => {
      const id = req.body.id;
      // TODO: add validation
