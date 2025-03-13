@@ -1,5 +1,8 @@
 const db = require('../db/queries');
 
+const { validationResult } = require("express-validator"); 
+const { validateGame } = require('../validators/validator');
+
 const gameListGet = async (req, res) => {
      const games = await db.gameList();
 
@@ -86,14 +89,24 @@ const gameCreateGet = async (req, res) => {
      });
 }
 
-const gameCreatePost = async (req, res) => {
-
-     const {title, release_date, developer} = req.body;
-     // TODO: add validation
-     // await db.addGame({title, release_date, developer});
-     res.redirect("/games");
-
-}
+const gameCreatePost = [
+     validateGame,
+     async (req, res) => {
+          const errors = validationResult(req);
+          const developers = await db.developerList();
+          if (!errors.isEmpty()) {
+               return res.status(400).render("create/createGame", {
+                    title: "Create game",
+                    errors: errors.array(),
+                    developers: developers,
+               });
+          }
+          
+          const {title, release_date, developer} = req.body;
+          await db.addGame({title, release_date, developer});
+          res.redirect("/games");
+     }
+];
 
 const monsterCreateGet = (req, res) => {
      res.render('create/createMonster', {
