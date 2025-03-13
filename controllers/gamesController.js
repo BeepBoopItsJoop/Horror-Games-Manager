@@ -21,6 +21,7 @@ const gameGet = async (req, res) => {
 }
 
 const gameUpdateGet = async (req, res) => {
+// TODO: Check if user has right to delete
      const id = req.params.id
 
      const game = (await db.game(id))[0];
@@ -234,11 +235,14 @@ const gameDeleteGet = async (req, res) => {
      });
 }
 
-const gameDeletePost = async (req, res) => {
-     const id = req.params.id;
-     // await db.deleteGame(id);
-     res.redirect('/games/');
-}
+const gameDeletePost = [
+     async (req, res) => {
+          // TODO: Check if user has right to delete
+          const id = req.params.id;
+          // await db.deleteGame(id);
+          res.redirect('/games/');
+     }
+];
 
 module.exports = {
      gameGet,

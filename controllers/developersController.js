@@ -95,17 +95,6 @@ const developerDeletePost = [
      async (req, res) => {
           const id = req.params.id;
 
-          const errors = validationResult(req);
-          if (!errors.isEmpty()) {
-               const developer = (await db.developer(id))[0];
-
-               return res.status(400).render("delete/deleteDeveloper", {
-                    title: `Delete ${developer.name}`,
-                    errors: errors.array(),
-                    developer: developer,
-               });
-          }
-
           await db.deleteDeveloper(id);
           res.redirect(`/developers/`);
      }
