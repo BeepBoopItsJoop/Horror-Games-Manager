@@ -3,16 +3,26 @@ const db = require('../db/queries');
 const { body, validationResult } = require("express-validator"); 
 
 const alphaErr = 'must only contain letters';
+const alphaNumErr = 'must only contain letters or numbers';
 const nameLengthErr = "must be between 1 and 50 characters.";
+const emptyErr = "is required";
+const intErr = "must be an integer (you shouldnt normally get this message)";
 
 const validateDeveloper = [
      body("name").trim()
-          .isAlpha().withMessage(`Developer name ${alphaErr}`)
-          .isLength({ min: 1, max: 50 }).withMessage(`Developer name ${nameLengthErr}`),
-          body("country").trim()
-          .isAlpha().withMessage(`Country ${alphaErr}`)
-          .isLength({ min: 1, max: 50 }).withMessage(`Country ${nameLengthErr}`),
+          .isAlphanumeric('en-US', { ignore: ' .-_\'' }).withMessage(`Developer name ${alphaNumErr}`)
+          .isLength({ min: 1, max: 50 }).withMessage(`Developer name ${nameLengthErr}`)   
+          .notEmpty().withMessage(`Developer name ${emptyErr}`),
+     body("country").trim()
+          .isAlpha('en-US', { ignore: ' ' }).withMessage(`Country ${alphaErr}`)
+          .isLength({ min: 1, max: 50 }).withMessage(`Country ${nameLengthErr}`)
+          .notEmpty().withMessage(`Country ${emptyErr}`)
 ];
+
+const validateID = [
+     body("id").trim().escape()
+          .isInt().withMessage(`ID ${intErr}`),
+]
 
 const developerListGet = async (req, res) => {
      const developers = await db.developerList();
@@ -55,14 +65,13 @@ const developerCreatePost = [
           }
 
           const {name, country} = req.body;
-          // await db.addDeveloper({name, country});
+          await db.addDeveloper({name, country});
           res.redirect("/developers");
      }
 ];
 
 const developerUpdateGet = async (req, res) => {
      const developer = (await db.developer(req.params.id))[0];
-     developer.id = req.params.id;
 
      res.render("update/updateDeveloper", {
           title: `Update ${developer.name}`,
@@ -70,13 +79,25 @@ const developerUpdateGet = async (req, res) => {
      });
 }
 
-const developerUpdatePost = async (req, res) => {
-     const { name, country, id } = req.body;
-     // TODO: add validation
-     // await db.updateDeveloper({name, country, id});
-     res.redirect(`/developers/${id}`);
+const developerUpdatePost = [
+     validateDeveloper,
+     validateID,
+     async (req, res) => {
+          const developer = (await db.developer(req.params.id))[0];
+          const errors = validationResult(req);
+          if (!errors.isEmpty()) {
+               return res.status(400).render("update/updateDeveloper", {
+                    title: `Update ${developer.name}`,
+                    errors: errors.array(),
+                    developer: developer,
+               });
+          }
 
-}
+          const { name, country, id } = req.body;
+          await db.updateDeveloper({name, country, id});
+          res.redirect(`/developers/${id}`);
+     }
+];
 
 const developerDeleteGet = async (req, res) => {
      const developer = (await db.developer(req.params.id))[0];
