@@ -125,7 +125,7 @@ const developerDeletePost = [
 
           const id = req.body.id;
           await db.deleteDeveloper(id);
-          res.redirect(`/../../`);
+          res.redirect(`/developers/`);
      }
 ];
 
