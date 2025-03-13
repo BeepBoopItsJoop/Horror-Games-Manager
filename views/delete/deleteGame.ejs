@@ -11,10 +11,7 @@
           <h2>Do you want to delete <%= game.title %>?</h2>
 
           <button type="submit">Yes</button>
-          <button onclick="history.back()">No</button>
-
-          <!-- Hidden input field to include id in the POST request -->
-          <input type="hidden" name="id" value="<%= game.id %>">
+          <button onclick="window.location.href='/games/<%= game.id %>'">No</button>
      </form>
 </body>
 </html>

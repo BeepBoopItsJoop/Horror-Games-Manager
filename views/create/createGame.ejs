@@ -23,8 +23,8 @@
           <label for="release_date">Release Date: </label>
           <input type="date" name="release_date" id="release_date" required> <br>
 
-          <label for="developer">Choose developer for this game:</label>
-          <select name="developer" id="developer">
+          <label for="developer_id">Choose developer for this game:</label>
+          <select name="developer_id" id="developer_id">
                <% developers.forEach(dev => { %>
                     <option value="<%= dev.id %>" > <%= dev.name %> </option>
                <% }) %>

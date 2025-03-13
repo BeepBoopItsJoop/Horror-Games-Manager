@@ -21,9 +21,9 @@ const gameGet = async (req, res) => {
 }
 
 const gameUpdateGet = async (req, res) => {
-     const game = (await db.game(req.params.id))[0];
-     game.id = req.params.id;
+     const id = req.params.id
 
+     const game = (await db.game(id))[0];
      const developers = await db.developerList();
 
      res.render("update/updateGame", {
@@ -33,12 +33,29 @@ const gameUpdateGet = async (req, res) => {
      });
 }
 
-const gameUpdatePost = async (req, res) => {
-     const { title, release_date, developer_id, id } = req.body;
-     // TODO: add validation
-     // await db.updateGame({title, release_date, developer_id, id});
-     res.redirect(`/games/${id}`);
-}
+const gameUpdatePost = [ 
+     validateGame,
+     async (req, res) => {
+          const id = req.params.id;
+
+          const errors = validationResult(req);
+          if(!errors.isEmpty()) {
+               const game = (await db.game(id))[0];
+               const developers = await db.developerList();
+
+               return res.status(400).render('update/updateGame', {
+                    title: `Update ${game.title}`,
+                    errors: errors.array(),
+                    game: game,
+                    developers: developers,
+               });
+          }
+
+          const { title, release_date, developer_id } = req.body;
+          await db.updateGame({title, release_date, developer_id, id});
+          res.redirect(`/games/${id}`);
+     }
+];
 
 const gameMonsterListGet = async (req, res) => {
      const monsters = await db.gameMonsterList(req.params.id);
@@ -93,8 +110,9 @@ const gameCreatePost = [
      validateGame,
      async (req, res) => {
           const errors = validationResult(req);
-          const developers = await db.developerList();
           if (!errors.isEmpty()) {
+               const developers = await db.developerList();
+               
                return res.status(400).render("create/createGame", {
                     title: "Create game",
                     errors: errors.array(),
@@ -209,18 +227,17 @@ const locationDeletePost = async (req, res) => {
 const gameDeleteGet = async (req, res) => {
      const id = req.params.id;
      const game = (await(db.game(id)))[0];
-     game.id = id;
 
-res.render('delete/deleteGame', {
+     res.render('delete/deleteGame', {
           title: `Delete ${game.title}`,
           game: game,
      });
 }
 
 const gameDeletePost = async (req, res) => {
-     const id = req.body.id;
+     const id = req.params.id;
      // await db.deleteGame(id);
-     res.redirect('/../..');
+     res.redirect('/games/');
 }
 
 module.exports = {

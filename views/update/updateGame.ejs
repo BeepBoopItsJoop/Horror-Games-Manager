@@ -9,6 +9,8 @@
      <%- include('../partials/nav') %>
 
      <h1><%= title %></h1>
+
+     <%- include("../partials/errors") %>
      
      <form action="/games/<%= game.id %>/modify" method="post">
           <label for="title">Title of game: </label>
@@ -30,9 +32,6 @@
                     </option>
                <% }) %>
           </select> <br>
-
-          <!-- Hidden input field to include id in the POST request -->
-          <input type="hidden" name="id" value="<%= game.id %>">
 
           <button type="submit">Modify game</button>
 

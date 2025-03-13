@@ -1,7 +1,7 @@
 const db = require('../db/queries');
 
 const { validationResult } = require("express-validator"); 
-const { validateDeveloper, validateID } = require('../validators/validator');
+const { validateDeveloper } = require('../validators/validator');
 
 const developerListGet = async (req, res) => {
      const developers = await db.developerList();
