@@ -3,13 +3,12 @@
 <head>
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Horror game manager</title>
+     <title><%= title %></title>
 </head>
 <body>
      <%- include('partials/nav.ejs') %>
 
-     <h1>Horror game manager</h1>
-     <span>This is a horror game library</span> <br>
-     <a href="/games">Check out our games</a> <br>     
+     <h1>Supplied parameters are invalid</h1>
+     <span><%= locals.url %></span>
 </body>
 </html>

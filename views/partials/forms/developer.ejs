@@ -1,0 +1,11 @@
+<form id="form" action=<%- locals.breadcrumbs %> method="post">
+     <label for="name">Name of developer: </label>
+     <input type="text" name="name" id="name" required
+          value=<%= (locals.item?.name) ? item.name : ''%>
+          > <br>
+          
+          <label for="country">Country of origin: </label>
+          <input type="text" name="country" id="country" required     
+          value=<%= (locals.item?.country) ? item.country : ''%>
+     > <br>
+</form>

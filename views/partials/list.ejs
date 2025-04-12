@@ -1,0 +1,14 @@
+<%  let cardType = include('./type', {type: locals.type}).trim();%>
+<% if(!cardType) throw new Error('Vewy baD!') %>
+
+<a href=<%- locals.breadcrumbs + 'new' %>>New item</a>
+<ul>
+     <!--  TODO: have not silently fail is it doesnt find the type -->
+     <% locals.items?.forEach(item => { %>
+          <li>
+               <%- include(`./cards/${cardType}`, {item: item}); %>
+          </li>
+
+          <a href=<%- locals.breadcrumbs + item.id %>>Check page</a>
+     <% }); %>
+</ul>

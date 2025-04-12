@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title><%- title %></title>
+</head>
+
+<body>
+     <%- include('./partials/nav'); %>
+
+     <a href=<%- locals.breadcrumbs %>>Go back</a> <br>
+     
+     <%- include('./partials/errors'); %>
+
+     <%- include('./partials/cards/game', {item: locals.game}) %>
+
+     <%- include('./partials/list', {
+          type: locals.type,
+          breadcrumbs: locals.breadcrumbs + 'locations/',
+          items: locals.items,
+     }); %>
+
+</body>
+
+</html>

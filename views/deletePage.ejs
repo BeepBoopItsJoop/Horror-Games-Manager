@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title><%= locals.title %></title>
+</head>
+<body>
+     <h1> <%= locals.title %> </h1>
+
+     <%- include("./partials/errors") %>
+
+     <form action=<%- locals.breadcrumbs + 'delete' %> method="post">
+          <h2>Do you want to delete <%= locals.name %>?</h2>
+
+          <button type="submit">Yes</button>
+          <a href=<%- locals.breadcrumbs %>>No</a>
+          
+     </form>
+</body>
+</html>

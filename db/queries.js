@@ -20,16 +20,16 @@ const game = async (id) => {
      WHERE games.id = ($1);
      `;
      const { rows } = await pool.query(SQL, [id]);
-     return rows;
+     return rows[0];
 }
 
-const addGame = async ({title, release_date, developer}) => {
+const addGame = async ({title, release_date, developer_id}) => {
      const SQL = `
      INSERT INTO games (title, release_date, developer_id)
      VALUES ($1, $2, $3);
      `;
-     
-     await pool.query(SQL, [title, release_date, developer]);
+          
+     await pool.query(SQL, [title, release_date, developer_id]);
 }
 
 const updateGame = async ({title, release_date, developer_id, id}) => {
@@ -71,26 +71,26 @@ const monster = async (id) => {
      WHERE monsters.id = ($1);`;
 
      const { rows } = await pool.query(SQL, [id]);
-     return rows;
+     return rows[0];
 }
 
-const addMonster = async ({name, description, id}) => {
+const addMonster = async ({name, description, game_id}) => {
      const SQL = `
      INSERT INTO monsters (name, description, game_id)
      VALUES ($1, $2, $3);
      `;
      
-     await pool.query(SQL, [name, description, id]);
+     await pool.query(SQL, [name, description, game_id]);
 }
 
-const updateMonster = async ({name, description, id}) => {
+const updateMonster = async ({name, description, monster_id}) => {
      const SQL = `
      UPDATE monsters 
      SET name = $1, description = $2
      WHERE id = $3;
      `;
      
-     await pool.query(SQL, [name, description, id]);
+     await pool.query(SQL, [name, description, monster_id]);
 }
 
 const deleteMonster = async (id) => {
@@ -119,7 +119,7 @@ const developer = async (id) => {
      WHERE developers.id = $1;
      `;
      const { rows } = await pool.query(SQL, [id]);
-     return rows;
+     return rows[0];
 }
 
 const addDeveloper = async ({name, country}) => {
@@ -152,7 +152,7 @@ const deleteDeveloper = async (id) => {
 
 const developerGameList = async (dev_id) => {
      const SQL = `
-     SELECT games.title, games.release_date, games.id
+     SELECT games.title, games.release_date, games.id, developers.name AS developer_name
      FROM games 
      JOIN developers 
      ON (games.developer_id = developers.id) 
@@ -176,15 +176,15 @@ const gameLocationList = async (id) => {
      return rows;
 }
 
-const location = async (id) => {
+const location = async (location_id) => {
      const SQL = `
      SELECT locations.id, locations.name, locations.description, locations.game_id
 
      FROM locations
      WHERE locations.id = ($1);`;
 
-     const { rows } = await pool.query(SQL, [id]);
-     return rows;
+     const { rows } = await pool.query(SQL, [location_id]);
+     return rows[0];
 }
 
 const addLocation = async ({name, description, id}) => {
@@ -196,14 +196,14 @@ const addLocation = async ({name, description, id}) => {
      await pool.query(SQL, [name, description, id]);
 }
 
-const updateLocation = async ({name, description, id}) => {
+const updateLocation = async ({name, description, location_id}) => {
      const SQL = `
      UPDATE locations 
      SET name = $1, description = $2
      WHERE id = $3;
      `;
      
-     await pool.query(SQL, [name, description, id]);
+     await pool.query(SQL, [name, description, location_id]);
 }
 
 const deleteLocation = async (id) => {

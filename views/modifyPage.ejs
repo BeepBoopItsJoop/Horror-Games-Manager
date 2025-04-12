@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title><%= title %></title>
+</head>
+<body>
+     <%- include('./partials/nav'); %>
+
+     <a href=<%- locals.breadcrumbs %>><b>Go back</b></a>
+
+     <h1><%= title %></h1>
+
+     <%- include("./partials/errors"); %>
+     
+     <% const type = include('./partials/type', {type: locals.type}).trim();%>
+     <% const includePath = './partials/forms/' + type; %>
+     <%- include(includePath, {
+          // Include form specific to the supplied type
+          breadcrumbs: (locals.breadcrumbs + 'modify'),
+          // item is here to perserve user data after validation attempt 
+          item: locals.item,  
+     }); %>
+     <button form="form" type="submit">Modify item</button>
+
+</body>
+</html> 

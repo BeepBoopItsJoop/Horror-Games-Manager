@@ -1,0 +1,16 @@
+<% let cardType%><% switch (locals.type) { 
+     case 'developer': 
+          cardType = 'developer'; 
+          break; 
+     case 'game':
+          cardType = 'game';
+          break;
+     case 'monster':
+          cardType = 'monster';
+          break;
+     case 'location':
+          cardType = 'location';
+          break;
+     default:
+          // Meant to crash here
+}%><%- cardType %>

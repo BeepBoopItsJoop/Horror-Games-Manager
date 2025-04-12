@@ -1,0 +1,26 @@
+<form id="form" action=<%- locals.breadcrumbs %> method="post">
+     <label for="title">Title of game: </label>
+     <input type="text" name="title" id="title" required
+          value=<%= (locals.item?.title) ? item.title : ''%>
+     > <br>
+
+     <% let date = locals.item?.release_date ? (new Date(item.release_date)).toISOString().split('T')[0] : '' %>
+     <label for="release_date">Release date: </label>
+     <input type="date" name="release_date" id="release_date" required     
+          value=<%= date %>
+     > <br>
+
+     <label for="developer_id">Choose developer for this game:</label>
+     <select name="developer_id" id="developer_id">
+          <% locals.developers?.forEach(dev => { %>
+               <option 
+                    value="<%= dev.id %>" 
+                    <% if(dev.id = locals.item?.developer_id) { %>
+                         selected     
+                    <% } %>
+               > 
+                    <%= dev.name %>
+               </option>
+          <% }) %>
+     </select> <br>
+</form>

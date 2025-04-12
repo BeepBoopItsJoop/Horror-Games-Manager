@@ -1,4 +1,4 @@
-const { body } = require("express-validator"); 
+const { body, param} = require("express-validator"); 
 
 const alphaErr = 'must only contain letters';
 const alphaNumErr = 'must only contain letters or numbers';
@@ -23,17 +23,28 @@ const validateGame = [
           .isLength({min: 1, max: 50}).withMessage(`Game title ${nameLengthErr}`)
           .notEmpty().withMessage(`Game title ${emptyErr}`),
      body("release_date").trim()
-          .isDate().withMessage(`Release date ${dateErr}  (shouldnt normally happen)`)
+          .isDate().withMessage(`Release date ${dateErr}`)
           .notEmpty().withMessage(`Release date ${emptyErr}`),
      body("developer_id").trim().escape()
           .isInt().withMessage(`Developer ID ${intErr} (shouldnt normally get this)`)
           .notEmpty().withMessage(`Developer ID ${emptyErr} (shouldnt normally get this)`),
 ];
 
-// const validateID = [
-//      body("id").trim().escape()
-//           .isInt().withMessage(`ID ${intErr}`)
-//           .notEmpty().withMessage(`ID ${emptyErr}`),
-// ];
+const validateMonster = [
+     body("name").trim()
+          .isLength({ min: 1, max: 50 }).withMessage(`Monster name ${nameLengthErr}`)   
+          .notEmpty().withMessage(`Monster name ${emptyErr}`),
+     body("description").trim()
+          .isLength({ min: 1, max: 400 }).withMessage(`Monster Description ${nameLengthErr}`)   
+          .notEmpty().withMessage(`Monster Description ${emptyErr}`),
+];
+const validateLocation = [
+     body("name").trim()
+          .isLength({ min: 1, max: 50 }).withMessage(`Location name ${nameLengthErr}`)   
+          .notEmpty().withMessage(`Location name ${emptyErr}`),
+     body("description").trim()
+          .isLength({ min: 1, max: 400 }).withMessage(`Location Description  ${nameLengthErr}`)   
+          .notEmpty().withMessage(`Location Description ${emptyErr}`),
+];
 
-module.exports = { validateDeveloper, validateGame };
+module.exports = { validateDeveloper, validateGame, validateMonster, validateLocation };

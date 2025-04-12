@@ -1,0 +1,11 @@
+<form id="form" action=<%- locals.breadcrumbs %> method="post">
+     <label for="name">Name of monster: </label>
+     <input type="text" name="name" id="name" required
+          value=<%= (locals.item?.name) ? item.name : ''%>
+     > <br>
+          
+     <label for="description">description of monster: </label>
+     <input type="text" name="description" id="description" required
+          value=<%= (locals.item?.description) ? item.description : ''%>
+     > <br>
+</form>

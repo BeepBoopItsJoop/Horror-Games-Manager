@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title><%- title %>></title>
+</head>
+<body>
+     <%- include('./partials/nav'); %>
+
+     <a href= <%- locals.breadcrumbs %>>Go back</a> <br>
+
+     <% const path = locals.breadcrumbs + locals.item.id; %>
+     <a href= <%- `${path}/modify` %> >Update</a>
+     <a href= <%- `${path}/delete` %> >Delete</a> <br>
+
+     <%- include('./partials/cards/monster.ejs', {item: locals.item}); %>
+
+</body>
+</html>

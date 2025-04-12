@@ -1,38 +1,103 @@
 const db = require('../db/queries');
 
+const asyncHandler = require('express-async-handler');
+const NotFoundError = require('../errors/NotFoundError');
+const CustomError = require('../errors/CustomError');
+
 const { validationResult } = require("express-validator"); 
-const { validateGame } = require('../validators/validator');
+const { validateGame, validateMonster, validateLocation } = require('../validators/validator');
 
-const gameListGet = async (req, res) => {
+const gameListGet = asyncHandler(async (req, res) => {
      const games = await db.gameList();
+     if(!games) {
+          throw new NotFoundError("No games found", req.originalURL);
+     }
 
-     res.render('lists/gameList', {
+     res.render('list', {
+          type: 'game',
           title: 'Game list',
-          games: games,
+          items: games,
+          breadcrumbs: '/games/',
      });
-}
+})
 
-const gameGet = async (req, res) => {
-     const games = await db.game(req.params.id);
-     res.render('lists/gameList', {
-          title: games[0].title,
-          games: games,
+const gameGet = asyncHandler(async (req, res) => {
+     const game = await db.game(req.params.id);
+
+     if(!game) {
+          throw new NotFoundError("Game not found", req.originalURL);
+     }
+
+     res.render('gamePage', {
+          title: game.title,
+          item: game,
+          breadcrumbs: '/games/',
      });
-}
+})
 
-const gameUpdateGet = async (req, res) => {
+const gameCreateGet = asyncHandler(async (req, res) => {
+     const developers = await db.developerList();
+     if(!developers) {
+          throw new CustomError('Developers not found', 500);
+     }
+
+     res.render("createPage", {
+          title: "Create game",
+          type: 'game',
+          breadcrumbs: '/games/',
+          developers: developers
+     });
+})
+
+const gameCreatePost = [
+     validateGame,
+     asyncHandler(async (req, res) => {
+          const errors = validationResult(req);
+          if (!errors.isEmpty()) {
+               const developers = await db.developerList();
+               if(!developers) {
+                    throw new CustomError('Developers not found', 500);
+               }
+               
+               return res.status(400).render("createPage", {
+                    title: "Create game",
+                    type: 'game',
+                    breadcrumbs: '/games/',
+                    developers: developers,
+                    // Failed validation, preserve user input and give feedback errors
+                    item: req.body,
+                    errors: errors.array(),
+               });
+          }
+          
+          const {title, release_date, developer_id} = req.body;
+          await db.addGame({title, release_date, developer_id});
+          res.redirect("/games");
+     })
+];
+
+const gameUpdateGet = asyncHandler(async (req, res) => {
 // TODO: Check if user has right to delete
      const id = req.params.id
 
-     const game = (await db.game(id))[0];
+     const game = await db.game(id);
      const developers = await db.developerList();
 
-     res.render("update/updateGame", {
+     if(!game) {
+          throw new NotFoundError('Game not found', req.originalUrl);
+     }
+     if(!developers) {
+          throw new CustomError('No developers in database', 500);
+     }
+
+     res.render("modifyPage", {
           title: `Update ${game.title}`,
-          game: game,
+          type: 'game',
+          breadcrumbs: `/games/${game.id}/`,
+          item: game,
           developers: developers,
      });
-}
+})
 
 const gameUpdatePost = [ 
      validateGame,
@@ -41,14 +106,21 @@ const gameUpdatePost = [
 
           const errors = validationResult(req);
           if(!errors.isEmpty()) {
-               const game = (await db.game(id))[0];
+               const game = await db.game(id);
                const developers = await db.developerList();
 
-               return res.status(400).render('update/updateGame', {
+               if(!game) {
+                    throw new NotFoundError('Game not found, req', req.originalUrl)
+               }
+
+               return res.status(400).render('modifyPage', {
                     title: `Update ${game.title}`,
-                    errors: errors.array(),
-                    game: game,
+                    type: 'game',
+                    breadcrumbs: `/games/${game.id}/`,
                     developers: developers,
+                    // Failed validation, preserve user input and give feedback errors
+                    item: req.body,
+                    errors: errors.array(),
                });
           }
 
@@ -58,191 +130,303 @@ const gameUpdatePost = [
      }
 ];
 
-const gameMonsterListGet = async (req, res) => {
-     const monsters = await db.gameMonsterList(req.params.id);
-     const game = (await db.game(req.params.id))[0];
-
-     res.render('lists/monsterList', {
-          title: game.title,
-          monsters: monsters,
-          game: game,
-     });
-}
-
-const monsterGet = async (req, res) => {
-     const monsters = await db.monster(req.params.monster_id);
-
-     res.render('lists/monsterList', {
-          title: monsters[0].name,
-          monsters: monsters,
-     });
-}
-
-const gameLocationListGet = async (req, res) => {
-     const locations = await db.gameLocationList(req.params.id);
-     const game = (await db.game(req.params.id))[0];
-
-     res.render('lists/locationList', {
-          title: game.title,
-          locations: locations,
-          game:game,
-     });
-}
-
-const locationGet = async (req, res) => {
-     const locations = await db.location(req.params.location_id);
-
-     res.render('lists/locationList', {
-          title: locations[0].name,
-          locations: locations,
-     });
-}
-
-const gameCreateGet = async (req, res) => {
-     const developers = await db.developerList();
-
-     res.render("create/createGame", {
-          title: "Create game",
-          developers: developers
-     });
-}
-
-const gameCreatePost = [
-     validateGame,
-     async (req, res) => {
-          const errors = validationResult(req);
-          if (!errors.isEmpty()) {
-               const developers = await db.developerList();
-               
-               return res.status(400).render("create/createGame", {
-                    title: "Create game",
-                    errors: errors.array(),
-                    developers: developers,
-               });
-          }
-          
-          const {title, release_date, developer} = req.body;
-          await db.addGame({title, release_date, developer});
-          res.redirect("/games");
+const gameDeleteGet = asyncHandler(async (req, res) => {
+     const game = await(db.game(req.params.id));
+     if(!game) {
+          throw new NotFoundError('Game not found', req.originalUrl)
      }
-];
+
+     res.render('deletePage', {
+          title: `Delete ${game.title}`,
+          name: game.title,
+          breadcrumbs: `/games/${game.id}/`,
+     });
+})
+
+const gameDeletePost = asyncHandler(async (req, res) => {
+     // TODO: Check if user has right to delete
+     const id = req.params.id;
+
+     const game = await db.game(id);
+     if(!game) {
+          throw new NotFoundError('Game not found', req.originalUrl);
+     }
+
+     await db.deleteGame(id);
+     res.redirect('/games/');
+})
+
+const gameMonsterListGet = asyncHandler(async (req, res) => {
+     const monsters = await db.gameMonsterList(req.params.id);
+     const game = await db.game(req.params.id);
+
+     if(!game) {
+          throw new NotFoundError('Game not found', req.originalUrl);
+     }
+     
+     if(!monsters) {
+          throw new NotFoundError('Monster list not found', req.originalUrl)
+     }
+
+     res.render('monstersList', {
+          type: 'monster',
+          title: `${game.title} monsters`,
+          items: monsters,
+          game: game,
+          breadcrumbs: `/games/${game.id}/`,
+     });
+})
+
+const monsterGet = asyncHandler(async (req, res) => {
+     const monster = await db.monster(req.params.monster_id);
+     if(!monster) {
+          throw new NotFoundError('Monster not found', req.originalUrl);
+     }
+
+     res.render('monsterPage', {
+          title: monster.name,
+          item: monster,
+          breadcrumbs: `/games/${monster.game_id}/monsters/`,
+     });
+})
 
 const monsterCreateGet = (req, res) => {
-     res.render('create/createMonster', {
+     const id = req.params.id;
+
+     res.render('createPage', {
           title: 'Add a new monster',
-          id: req.params.id,
+          type: 'monster',
+          breadcrumbs: `/games/${id}/monsters/`,
      });
 }
 
-const monsterCreatePost = async (req, res) => {
-     const {name, description} = req.body;
-     const id = req.params.id;
-     // TODO: add validation
-     // await db.addMonster({name, description, id});
-     res.redirect(`/games/${id}/monsters`);
-}
+const monsterCreatePost = [
+     validateMonster,
+     asyncHandler(async (req, res) => {
+          const game_id = req.params.id;
+
+          const errors = validationResult(req);
+          if(!errors.isEmpty()) {
+               return res.status(400).render('createPage', {
+                    title: 'Add a new monster',
+                    type: 'monster',
+                    breadcrumbs: `/games/${game_id}/monsters/`,
+                    // Failed validation, preserve user input and give feedback errors
+                    item: req.body,
+                    errors: errors.array(),
+               });
+          }
+
+          const {name, description} = req.body;
+          await db.addMonster({name, description, game_id});
+          res.redirect(`/games/${game_id}/monsters`);
+     })
+]
+
+const monsterUpdateGet = asyncHandler(async (req,res) => {
+     const monster = await db.monster(req.params.monster_id);
+     if(!monster) {
+          throw new NotFoundError('Monster not found', req.originalUrl);
+     }
+
+     res.render('modifyPage', {
+          title: `Update ${monster.name}`,
+          type: 'monster',
+          breadcrumbs: `/games/${monster.game_id}/monsters/${monster.id}/`,
+          item: monster,
+     })
+})
+
+const monsterUpdatePost = [
+     validateMonster,
+     asyncHandler(async (req, res) => {
+          const monster_id = req.params.monster_id;
+          const game_id = req.params.id;
+
+          const monster = await db.monster(monster_id);
+          if(!monster) {
+               throw new NotFoundError('Monster not found', req.originalUrl);
+          }
+
+          const errors = validationResult(req);
+          if(!errors.isEmpty()) {
+               return res.status(400).render('modifyPage', {
+                    title: `Update ${monster.name}`,
+                    type: 'monster',
+                    breadcrumbs: `/games/${game_id}/monsters/${monster_id}/`,
+                    // Failed validation, preserve user input and give feedback errors
+                    item: req.body,
+                    errors: errors.array(),
+               });
+          }
+
+          const { name, description } = req.body;
+          await db.updateMonster({name, description, monster_id});
+          res.redirect(`/games/${game_id}/monsters/${monster_id}/`);
+     })
+];
+
+const monsterDeleteGet = asyncHandler(async (req, res) => {
+     const monster = await db.monster(req.params.monster_id);
+     if(!monster) {
+          throw new NotFoundError('Monster not found', req.originalUrl);
+     }
+
+     res.render("deletePage", {
+          title: `Delete ${monster.name}`,
+          name: monster.name,
+          breadcrumbs: `/games/${monster.game_id}/monsters/${monster.id}/`,
+     });
+})
+
+const monsterDeletePost = asyncHandler(async (req, res) => {
+     // TODO: Check if user has right to delete
+     const id = req.params.monster_id;
+     const monster = await db.monster(id);
+     if(!monster) {
+          throw new NotFoundError('Monster not found', req.originalUrl);
+     }
+
+     await db.deleteMonster(id);
+     res.redirect(`/games/${monster.game_id}/monsters`);
+})
+
+const locationGet = asyncHandler(async (req, res) => {
+     const location = await db.location(req.params.location_id);
+     if(!location) {
+          throw new NotFoundError('location not found', req.originalUrl);
+     }
+
+     res.render('locationPage', {
+          title: location.name,
+          item: location,
+          breadcrumbs: `/games/${location.game_id}/locations/`,
+     });
+})
+
+const gameLocationListGet = asyncHandler(async (req, res) => {
+     const locations = await db.gameLocationList(req.params.id);
+     const game = await db.game(req.params.id);
+
+     if(!game) {
+          throw new NotFoundError('Game not found', req.originalUrl);
+     }
+     
+     if(!locations) {
+          throw new NotFoundError('Location list not found', req.originalUrl)
+     }
+
+     res.render('locationList', {
+          type: 'location',
+          title: `${game.title} locationss`,
+          items: locations,
+          game: game,
+          breadcrumbs: `/games/${game.id}/`,
+     });
+})
 
 const locationCreateGet = (req, res) => {
-     res.render('create/createLocation', {
+     const id = req.params.id;
+
+     res.render('createPage', {
           title: 'Add a new location',
-          id: req.params.id,
+          type: 'location',
+          breadcrumbs: `/games/${id}/locations/`,
      });
 }
 
-const locationCreatePost = async (req, res) => {
-     const {name, description} = req.body;
-     const id = req.params.id;
-     // TODO: add validation
-     // await db.addLocation({name, description, id});
-     res.redirect(`/games/${id}/locations`);
-}
-
-const monsterUpdateGet = async (req,res) => {
-     const monster = (await db.monster(req.params.monster_id))[0];
-     monster.id = req.params.monster_id;
-
-     res.render("update/updateMonster", {
-          title: `Update ${monster.name}`,
-          monster: monster,
-     });
-}
-
-const monsterUpdatePost = async (req,res) => {
-     const { name, description, id } = req.body;
-     // TODO: add validation
-     // await db.updateMonster({name, description, id});
-     res.redirect(`/games/monsters/${id}`);
-}
-
-const locationUpdateGet = async (req, res) => {
-     const location = (await db.location(req.params.location_id))[0];
-     location.id = req.params.location_id;
-
-     res.render("update/updateLocation", {
-          title: `Update ${location.name}`,
-          location: location,
-     });
-}
-
-const locationUpdatePost = async (req, res) => {
-     const { name, description, id } = req.body;
-     // TODO: add validation
-     // await db.updateLocation({name, description, id});
-     res.redirect(`/games/locations/${id}`);
-}
-
-const monsterDeleteGet = async (req, res) => {
-     const monster = (await db.monster(req.params.monster_id))[0];
-     monster.id = req.params.monster_id;
-
-     res.render("delete/deleteMonster", {
-          title: `Delete ${monster.name}`,
-          monster: monster,
-     });
-}
-
-const monsterDeletePost = async (req, res) => {
-     const id = req.body.id;
-     const monster = (await db.monster(id))[0];
-     // await db.deleteMonster(id);
-     res.redirect(`/games/${monster.game_id}/monsters`);
-}
-
-const locationDeleteGet = async (req, res) => {
-     const location = (await db.location(req.params.location_id))[0];
-     location.id = req.params.location_id;
-
-     res.render("delete/deleteLocation", {
-          title: `Delete ${location.name}`,
-          location: location,
-     });
-}
-
-const locationDeletePost = async (req, res) => {
-     const id = req.body.id;
-     const location = (await db.location(id))[0];
-     // await db.deleteLocation(id);
-     res.redirect(`/games/${location.game_id}/locations`);
-}
-
-const gameDeleteGet = async (req, res) => {
-     const id = req.params.id;
-     const game = (await(db.game(id)))[0];
-
-     res.render('delete/deleteGame', {
-          title: `Delete ${game.title}`,
-          game: game,
-     });
-}
-
-const gameDeletePost = [
-     async (req, res) => {
-          // TODO: Check if user has right to delete
+const locationCreatePost = [
+     validateLocation,
+     asyncHandler(async (req, res) => {
           const id = req.params.id;
-          // await db.deleteGame(id);
-          res.redirect('/games/');
+
+          const errors = validationResult(req);
+          if(!errors.isEmpty()) {
+               return res.status(400).render('createPage', {
+                    title: 'Add a new location',
+                    type: 'location',
+                    breadcrumbs: `/games/${id}/locations/`,
+                    // Failed validation, preserve user input and give feedback errors
+                    item: req.body,
+                    errors: errors.array(),
+               });
+          }
+
+          const {name, description} = req.body;
+          console.log('id is ', id);
+          await db.addLocation({name, description, id});
+          res.redirect(`/games/${id}/locations`);
+     })
+]
+
+
+const locationUpdateGet = asyncHandler(async (req, res) => {
+     const location = await db.location(req.params.location_id);
+     if(!location) {
+          throw new NotFoundError('location not found', req.originalUrl);
      }
+
+     res.render('modifyPage', {
+          title: `Update ${location.name}`,
+          type: 'location',
+          breadcrumbs: `/games/${location.game_id}/locations/${location.id}/`,
+          item: location,
+     })
+})
+
+const locationUpdatePost = [
+     validateLocation,
+     asyncHandler(async (req, res) => {
+          const location_id = req.params.location_id;
+          const game_id = req.params.id;
+
+          const location = await db.location(location_id);
+          if(!location) {
+               throw new NotFoundError('location not found', req.originalUrl);
+          }
+
+          const errors = validationResult(req);
+          if(!errors.isEmpty()) {
+               return res.status(400).render('modifyPage', {
+                    title: `Update ${location.name}`,
+                    type: 'location',
+                    breadcrumbs: `/games/${game_id}/locations/${location_id}/`,
+                    // Failed validation, preserve user input and give feedback errors
+                    item: req.body,
+                    errors: errors.array(),
+               });
+          }
+
+          const { name, description } = req.body;
+          await db.updateLocation({name, description, location_id});
+          res.redirect(`/games/${game_id}/locations/${location_id}/`);
+     })
 ];
+
+const locationDeleteGet = asyncHandler(async (req, res) => {
+     const location = await db.location(req.params.location_id);
+     if(!location) {
+          throw new NotFoundError('location not found', req.originalUrl);
+     }
+
+     res.render("deletePage", {
+          title: `Delete ${location.name}`,
+          name: location.name,
+          breadcrumbs: `/games/${location.game_id}/locations/${location.id}/`,
+     });
+})
+
+const locationDeletePost = asyncHandler(async (req, res) => {
+     // TODO: Check if user has right to delete
+     const id = req.params.location_id;
+     const location = await db.location(id);
+     if(!location) {
+          throw new NotFoundError('location not found', req.originalUrl);
+     }
+
+     await db.deleteLocation(id);
+     res.redirect(`/games/${location.game_id}/locations`);
+})
 
 module.exports = {
      gameGet,
