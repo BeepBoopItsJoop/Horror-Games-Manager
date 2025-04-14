@@ -7,8 +7,7 @@
      <% locals.items?.forEach(item => { %>
           <li>
                <%- include(`./cards/${cardType}`, {item: item}); %>
+               <a href=<%- locals.breadcrumbs + item.id %>>Check page</a>
           </li>
-
-          <a href=<%- locals.breadcrumbs + item.id %>>Check page</a>
      <% }); %>
 </ul>

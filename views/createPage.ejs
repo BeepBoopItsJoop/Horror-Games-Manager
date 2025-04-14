@@ -9,7 +9,7 @@
 <body>
      <%- include('./partials/nav'); %>
 
-     <a href=<%- locals.breadcrumbs %>><b>Go back</b></a>
+     <%- include('./partials/back', {breadcrumbs: locals.breadcrumbs}) %>
 
      <h1><%= title %></h1>
 

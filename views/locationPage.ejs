@@ -9,7 +9,7 @@
 <body>
      <%- include('./partials/nav'); %>
 
-     <a href= <%- locals.breadcrumbs %>>Go back</a> <br>
+     <%- include('./partials/back', {breadcrumbs: locals.breadcrumbs}) %>
 
      <% const path = locals.breadcrumbs + locals.item.id; %>
      <a href= <%- `${path}/modify` %> >Update</a>
